@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>K7-YTB-MP3</title>
+    <link rel="stylesheet" href="index.css"/>
+    <script src="function.js"></script>
+  </head>
+  <body>
+
+    <div class="content">
+      <div class="title">
+
+        <button onclick="minimize()" id="minimize">
+          <img src="./asset/-.svg" alt="Fermer la fenêtre">
+        </button>
+
+
+        <button onclick="quit()" id="quit">
+          <img src="./asset/x.svg" alt="Fermer la fenêtre">
+        </button>
+
+        
+      </div>
+
+      <div class="main-wrapper">
+        <div class="main">
+
+          <div class="center">
+            <div class="inputwrapper">
+              <input type="text" id="url" placeholder="Entrez une url youtube" onchange="resetIcon()" onfocus="resetIcon()">
+            </div>
+
+            <div class="bobine">
+              
+              <svg width="168" height="168" viewBox="0 0 168 168" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 84C0 130.392 37.6081 168 84 168C130.392 168 168 130.392 168 84C168 37.6081 130.392 -1.52588e-05 84 -1.52588e-05C37.6081 -1.52588e-05 0 37.6081 0 84Z" fill="#170101"/>
+                <path d="M38 84C38 109.405 58.5949 130 84 130C109.405 130 130 109.405 130 84C130 58.5949 109.405 38 84 38C58.5949 38 38 58.5949 38 84Z" fill="#E9C69B"/>
+                <path d="M47 84C47 104.435 63.5655 121 84 121C104.435 121 121 104.435 121 84C121 63.5655 104.435 47 84 47C63.5655 47 47 63.5655 47 84Z" fill="#170101"/>
+                <path d="M50.5 84C50.5 65.4985 65.4985 50.5 84 50.5C102.502 50.5 117.5 65.4985 117.5 84C117.5 102.502 102.502 117.5 84 117.5C65.4985 117.5 50.5 102.502 50.5 84Z" fill="#E9C69B"/>
+                <path d="M59.5 84C59.5 97.531 70.469 108.5 84 108.5C97.531 108.5 108.5 97.531 108.5 84C108.5 70.469 97.531 59.5 84 59.5C70.469 59.5 59.5 70.469 59.5 84Z" fill="#170101"/>
+                <rect width="83" height="6" transform="matrix(-1 0 0 1 126 81)" fill="#E9C69B"/>
+                <rect width="81.06" height="6" transform="matrix(0.5 0.866025 0.866025 -0.5 61.186 50.5134)" fill="#E9C69B"/>
+                <rect x="60.979" y="117.859" width="82.1925" height="6" transform="rotate(-60 60.979 117.859)" fill="#E9C69B"/>
+                <path d="M84 68L69 76V92L84 100L99 92V76L84 68Z" fill="#170101"/>
+            </svg>
+
+              <svg width="168" height="168" viewBox="0 0 168 168" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 84C0 130.392 37.6081 168 84 168C130.392 168 168 130.392 168 84C168 37.6081 130.392 -1.52588e-05 84 -1.52588e-05C37.6081 -1.52588e-05 0 37.6081 0 84Z" fill="#170101"/>
+                  <path d="M38 84C38 109.405 58.5949 130 84 130C109.405 130 130 109.405 130 84C130 58.5949 109.405 38 84 38C58.5949 38 38 58.5949 38 84Z" fill="#E9C69B"/>
+                  <path d="M47 84C47 104.435 63.5655 121 84 121C104.435 121 121 104.435 121 84C121 63.5655 104.435 47 84 47C63.5655 47 47 63.5655 47 84Z" fill="#170101"/>
+                  <path d="M50.5 84C50.5 65.4985 65.4985 50.5 84 50.5C102.502 50.5 117.5 65.4985 117.5 84C117.5 102.502 102.502 117.5 84 117.5C65.4985 117.5 50.5 102.502 50.5 84Z" fill="#E9C69B"/>
+                  <path d="M59.5 84C59.5 97.531 70.469 108.5 84 108.5C97.531 108.5 108.5 97.531 108.5 84C108.5 70.469 97.531 59.5 84 59.5C70.469 59.5 59.5 70.469 59.5 84Z" fill="#170101"/>
+                  <rect width="83" height="6" transform="matrix(-1 0 0 1 126 81)" fill="#E9C69B"/>
+                  <rect width="81.06" height="6" transform="matrix(0.5 0.866025 0.866025 -0.5 61.186 50.5134)" fill="#E9C69B"/>
+                  <rect x="60.979" y="117.859" width="82.1925" height="6" transform="rotate(-60 60.979 117.859)" fill="#E9C69B"/>
+                  <path d="M84 68L69 76V92L84 100L99 92V76L84 68Z" fill="#170101"/>
+              </svg>
+
+              <button onclick="convert()" id="convert">
+                <img src="./asset/download.svg" alt="Convertir l'url en mp3">
+              </button>
+
+              <div id="success" onclick="resetIcon()">
+                <img src="./asset/check-circle.svg" alt="">
+              </div>
+
+              <div id="error" onclick="resetIcon()">
+                <img src="./asset/x-32.svg" alt="">
+              </div>
+
+
+            </div>
+          </div>
+
+          <svg width="430" height="175" viewBox="0 0 450 182" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30.5292 3.71325C33.2023 1.54295 36.5407 0.358368 39.9839 0.358368H408.662C412.202 0.358368 415.628 1.61029 418.333 3.89269L444.672 26.1094C448.05 28.9594 450 33.1547 450 37.575V167C450 175.284 443.284 182 435 182L15 182C6.71575 182 7.62939e-06 175.284 7.62939e-06 167L7.62939e-06 35.6429C7.62939e-06 31.124 2.03717 26.846 5.54531 23.9977L30.5292 3.71325Z" fill="#F7D392"/>
+            <path d="M0 162.5H450V167C450 175.284 443.284 182 435 182H15C6.71574 182 0 175.284 0 167V162.5Z" fill="#E03F26"/>
+            <path d="M0 147.558H450V159.13H0V147.558Z" fill="#E03F26"/>
+            <path d="M0 134.934H450V143.876H0V134.934Z" fill="#E03F26"/>
+            <path d="M0 124.413H450V131.777H0V124.413Z" fill="#E03F26"/>
+            <path d="M0 113.367H450V120.205H0V113.367Z" fill="#E03F26"/>
+            <path d="M0 104.425H450V107.055H0V104.425Z" fill="#E03F26"/>
+            <path d="M0 92.8526H450V95.4827H0V92.8526Z" fill="#E03F26"/>
+            <path d="M0 78.6503H450V80.2283H0V78.6503Z" fill="#E03F26"/>
+          </svg>
+
+          <h3 class="watermark">K7-YTB-MP3</h3>
+
+        </div>
+      </div>
+      
+      <div class="footer">
+        <div class="param">
+
+          <h3>Select directory</h3>
+
+          <button onclick="chooseDirectory()" id="btn-choose-file">
+            <img src="./asset/folder-plus.svg" alt="Ajouter un dossier d'ajout">
+          </button>
+        </div>
+        <div class="footer-bar">
+
+          <svg width="286" height="49" viewBox="0 0 286 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M49.7585 3.71134C52.4928 1.31877 56.0027 0 59.636 0H226.364C229.997 0 233.507 1.31877 236.242 3.71135L285.37 46.6988C286.283 47.4972 285.718 49 284.505 49V49C284.18 49 283.866 48.8792 283.625 48.6611L236.284 5.8719C233.527 3.37977 229.942 2 226.226 2H59.7743C56.0577 2 52.4734 3.37977 49.7162 5.8719L2.37498 48.6611C2.13363 48.8792 1.81988 49 1.49455 49V49C0.282147 49 -0.282509 47.4972 0.629915 46.6988L49.7585 3.71134Z" fill="#E9C69B"/>
+          </svg>
+
+        </div>
+        <div class="param">
+
+          <h3>Show Error</h3>
+
+ 
+            <label class="switch">
+              <input type="checkbox" onchange="setIsErrorShown()" id="switch-show-error">
+              <span class="slider"></span>
+            </label>
+    
+          
+
+        </div>
+      </div>
+
+    </div>
+    
+
+  </body>
+</html>
