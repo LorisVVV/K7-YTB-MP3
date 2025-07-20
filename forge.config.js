@@ -4,16 +4,17 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: './src/asset/logo/logo-128-hori',
-    extraResource: ['./src/bin', './src/tmp']
+    icon: './src/asset/logo/logo-256-hori',
+    extraResource: ['./src/bin', './src/tmp', './src/asset/logo']
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        iconUrl :'https://raw.githubusercontent.com/LorisVVV/K7-YTB-MP3/refs/heads/master/src/asset/logo/logo-128-hori.ico',
-        setupIcon: './src/asset/logo/logo-128-hori.ico'
+        iconUrl :'https://raw.githubusercontent.com/LorisVVV/K7-YTB-MP3/refs/heads/master/src/asset/logo/logo-256-hori.ico',
+        setupIcon: './src/asset/logo/logo-256-hori.ico',
+        shortcutName :'K7-YTB-MP3'
       },
     },
     {

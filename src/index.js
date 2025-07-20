@@ -30,7 +30,9 @@ const createWindow = () => {
     transparent : true,
     backgroundColor : "#00000000",
     enableLargerThanScreen : false,
-    icon : path.join(__dirname, '/asset/logo/logo-128-hori.ico')
+    icon :  app.isPackaged
+              ? path.join(process.resourcesPath, '/asset/logo', 'logo-256-hori.ico')
+              :  path.join(__dirname, '/asset/logo/logo-256-hori.ico')
   });
 
   // and load the index.html of the app.
