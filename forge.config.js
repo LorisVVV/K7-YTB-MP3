@@ -12,7 +12,8 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        setupIcon: './src/asset/logo/logo-128-hori'
+        iconUrl :'https://raw.githubusercontent.com/LorisVVV/K7-YTB-MP3/refs/heads/master/src/asset/logo/logo-128-hori.ico',
+        setupIcon: './src/asset/logo/logo-128-hori.ico'
       },
     },
     {
