@@ -42,15 +42,12 @@ const createWindow = () => {
     win.setBounds(win.getBounds()); // force la fenêtre à garder sa config
   });
 
-
-
   win.on('restore', () => {
     if (lastPositionBeforeMinimize) {
       // Replace la fenêtre exactement à la position précédente
       win.setPosition(lastPositionBeforeMinimize.x, lastPositionBeforeMinimize.y)
     }
   });
-
 
   return win
 };
@@ -79,19 +76,14 @@ app.on('window-all-closed', () => {
   }
 });
 
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and import them here.
 
-
-
-let currentAnimation = null;
-
-function easeOutCubic(t) {
-  return 1 - Math.pow(1 - t, 3);
-}
 
 function animateTo(xTarget, yTarget, win, duration = 300) {
-  if (currentAnimation) {
-    clearTimeout(currentAnimation.timer);
-    currentAnimation = null;
+
+  const easeOutCubic = (t) => {
+    return 1 - Math.pow(1 - t, 3);
   }
 
   const { x: xStart, y: yStart } = win.getBounds();
@@ -125,10 +117,6 @@ function animateTo(xTarget, yTarget, win, duration = 300) {
   });
 }
 
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-
 ipcMain.handle('downloadAudio', async (event, url) => {
 
   const binPath = app.isPackaged
@@ -154,7 +142,8 @@ ipcMain.handle('downloadAudio', async (event, url) => {
       '--audio-quality', '0',   
       '--ffmpeg-location', ffmpegPath,
       '--paths', `temp:${app.isPackaged ? path.join(process.resourcesPath, 'tmp') : path.join(__dirname,'tmp')}`,
-      '--paths', `home:${outputPath}`,
+      '--paths', `${outputPath}`,
+      '--output', '%(title)s.%(ext)s',
       '--no-mtime',
       '--no-playlist',
       '--windows-filenames'

@@ -16,6 +16,10 @@ button {
   user-select: none;
 }
 
+button:focus-visible {
+  outline: 2px solid var(--accent-color);
+}
+
 html, body {
   width: 100%;
   height: 100%;
@@ -121,6 +125,10 @@ html, body {
   border-bottom: 2px solid var(--background-color);
 }
 
+/* #url:focus-visible {
+  border-bottom: 2px solid var(--accent-color);
+} */
+
 .bobine {
   position: relative;
   background-color: var(--background-color);
@@ -166,6 +174,10 @@ html, body {
 #convert:hover {
   background-color: var(--hover-color);
 
+}
+
+#convert:focus-visible {
+  outline: 2px solid var(--accent-color);
 }
 
 @keyframes spin {
@@ -302,3 +314,16 @@ html, body {
 .switch input:checked + .slider {
   transform: translateX(12px);
 }
+
+.switch:has(input:focus-visible):after {
+  content: "";
+  display: flex;
+  position: absolute;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  border-radius: 12px;
+  top: -3px;
+  left: -3px;
+  outline: 2px solid var(--accent-color);
+}
+
