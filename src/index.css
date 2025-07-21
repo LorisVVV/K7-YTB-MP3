@@ -1,0 +1,329 @@
+@import url('./font/Satoshi_Complete/Fonts/WEB/css/satoshi.css');
+
+* {
+  margin: 0%;
+  padding: 0%;
+  box-sizing: border-box;
+
+  --main-color: #f5d38c;
+  --second-color : #E9C69B;
+  --accent-color: #ce2c16;
+  --background-color: #2F2F2F;
+  --hover-color:  #3b3b3b;
+}
+
+button {
+  user-select: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent-color);
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  overflow: hidden;
+  backdrop-filter: opacity(0%);
+}
+
+.content {
+  position: relative;
+  border-radius: 15px;
+
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  width: 100%;
+  height: 100%;
+}
+
+.title {
+  position: fixed;
+  top: 0%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  user-select: none;
+  -webkit-app-region: drag;
+  background-color: #00000000;
+
+  border-radius: 15px;
+  z-index: 2;
+  padding: 4px 4px 0 4px;
+}
+
+.title > button {
+  border-radius: 50px;
+  width: fit-content;
+  height: fit-content;
+  -webkit-app-region: no-drag;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.title > button:hover {
+  background-color: var(--hover-color);
+}
+
+.main-wrapper {
+  width: fit-content;
+  height: fit-content;
+  padding:  10px 10px;
+}
+
+.main {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: fit-content;
+  height: fit-content;
+
+  overflow: hidden;
+}
+
+.center {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.inputwrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 60%;
+  height: fit-content;
+}
+
+#url {
+  font-family: 'Satoshi-Medium';
+  width: 100%;
+  background: none;
+  outline: none;
+  padding: 2px;
+  border: none;
+  border-bottom: 2px solid var(--background-color);
+}
+
+/* #url:focus-visible {
+  border-bottom: 2px solid var(--accent-color);
+} */
+
+.bobine {
+  position: relative;
+  background-color: var(--background-color);
+  display: flex;
+  height: 50%;
+  width: 60%;
+  gap: 26%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.bobine > svg {
+  height: 129px;
+  width: 129px;
+
+  flex-shrink: 0;
+  transition: all ease-in-out;
+}
+
+.bobine.spin > svg {
+  animation: spin infinite linear 2s ;
+}
+
+.bobine.spin > #convert {
+  display: none;
+}
+
+#convert {
+  cursor: pointer;
+  position: absolute;
+
+  background: none;
+  border: none;
+  outline: none;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 50px;
+  padding: 5px;
+  user-select: none;
+}
+
+#convert:hover {
+  background-color: var(--hover-color);
+
+}
+
+#convert:focus-visible {
+  outline: 2px solid var(--accent-color);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+  
+}
+
+.bobine.success > #convert, .bobine.error > #convert {
+  display: none;
+}
+
+#success, #error {
+  display: none;
+
+  position: absolute;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 50px;
+  padding: 5px;
+  user-select: none;
+}
+
+.bobine.success > #success, .bobine.error > #error{
+  display: flex;
+}
+
+.watermark {
+  user-select: none;
+  color: var(--hover-color);
+  font-size: smaller;
+  font-family: 'Satoshi-MediumItalic';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-right: 7px;
+}
+
+.footer {
+  position: absolute;
+
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+}
+
+.footer > div {
+  flex: 1;
+}
+
+.footer-bar {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.param {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.param > button {
+  border-radius: 50px;
+  width: fit-content;
+  height: fit-content;
+  -webkit-app-region: no-drag;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px;
+
+}
+
+.param > button:hover {
+  background-color: var(--hover-color);
+}
+
+.param > h3 {
+  font-family: 'Satoshi-Medium';
+  font-size: xx-small;
+  color: var(--second-color);
+}
+
+.switch {
+  display: flex;
+  cursor: pointer;
+  position: relative;
+
+  border-radius: 12px;
+  height: 14px;
+  width: 26px;
+
+  margin: 11px 6px;
+
+  outline: 2px solid var(--second-color);
+}
+
+.switch > input {
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  
+  margin: 2px;
+
+  width: 10px;
+  height: 10px;
+  border-radius: 12px;
+  background-color: var(--second-color);
+
+  transition: all ease-in-out 250ms;
+}
+
+.switch input:checked + .slider {
+  transform: translateX(12px);
+}
+
+.switch:has(input:focus-visible):after {
+  content: "";
+  display: flex;
+  position: absolute;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  border-radius: 12px;
+  top: -3px;
+  left: -3px;
+  outline: 2px solid var(--accent-color);
+}
+
