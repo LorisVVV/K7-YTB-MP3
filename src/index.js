@@ -6,7 +6,9 @@ const os = require('os');
 const fs = require('fs');
 
 let mainWindow;
-let lastPositionBeforeMinimize = null;
+let lastPositionBeforeMinimize = null;4
+const width = 450;
+const height = 260;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -16,8 +18,8 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 450,
-    height: 260,
+    width: width,
+    height: height,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -45,7 +47,9 @@ const createWindow = () => {
   win.on('restore', () => {
     if (lastPositionBeforeMinimize) {
       // Replace la fenêtre exactement à la position précédente
-      win.setPosition(lastPositionBeforeMinimize.x, lastPositionBeforeMinimize.y)
+      // win.setPosition(lastPositionBeforeMinimize.x, lastPositionBeforeMinimize.y)
+      // win.setSize(width, height);
+      win.setBounds(lastPositionBeforeMinimize)
     }
   });
 
@@ -168,7 +172,7 @@ ipcMain.handle('minimize', (event) => {
     const screenBounds = screen.getPrimaryDisplay()
     lastPositionBeforeMinimize = win.getBounds();
 
-    ;(async () => {
+    (async () => {
       await animateTo(screenBounds.bounds.width - 450,screenBounds.bounds.height - 260 - 100, win, 500)
       await animateTo(screenBounds.bounds.width - 450,screenBounds.bounds.height - 260, win, 250)
       await animateTo(screenBounds.bounds.width-450, screenBounds.bounds.height, win, 2000)
