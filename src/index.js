@@ -6,7 +6,7 @@ const os = require('os');
 const fs = require('fs');
 
 let mainWindow;
-let lastPositionBeforeMinimize = null;4
+let lastPositionBeforeMinimize = null;
 const width = 450;
 const height = 260;
 
