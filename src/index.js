@@ -82,15 +82,15 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-
-
 function animateTo(xTarget, yTarget, win, duration = 300) {
 
   const easeOutCubic = (t) => {
     return 1 - Math.pow(1 - t, 3);
   }
 
-  const { x: xStart, y: yStart } = win.getBounds();
+  const bounds = win.getBounds();
+  const xStart = bounds.x
+  const yStart = bounds.y
   const startTime = Date.now();
 
   const deltaX = xTarget - xStart;
@@ -106,7 +106,7 @@ function animateTo(xTarget, yTarget, win, duration = 300) {
       const x = Math.round(xStart + deltaX * eased);
       const y = Math.round(yStart + deltaY * eased);
 
-      win.setPosition(x, y);
+      win.setBounds({...bounds, x:x, y:y});
 
       if (progress < 1) {
         currentAnimation.timer = setTimeout(step, 1000 / 60);
@@ -175,9 +175,10 @@ ipcMain.handle('minimize', (event) => {
     (async () => {
       await animateTo(screenBounds.bounds.width - 450,screenBounds.bounds.height - 260 - 100, win, 500)
       await animateTo(screenBounds.bounds.width - 450,screenBounds.bounds.height - 260, win, 250)
-      await animateTo(screenBounds.bounds.width-450, screenBounds.bounds.height, win, 2000)
+      await animateTo(screenBounds.bounds.width - 450, screenBounds.bounds.height, win, 2000)
       win.minimize();
     })();
+
 
   }
 })
