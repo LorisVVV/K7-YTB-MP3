@@ -1,7 +1,1 @@
-{
-  "name": "com.lolorisotto.messagek7",
-  "description": "Hôte de messagerie entre l'application et l'extension K7-YTB-MP3",
-  "path": "C:\\Program Files\\K7-YTB-MP3\\.exe",
-  "type": "stdio",
-  "allowed_origins": ["chrome-extension://hlheeinjdfhgkpbgiagljoamaagldcjc/"]
-}
+{"name":"com.lolorisotto.messagek7","description":"Host for communication between app and the extension k7","path":"C:\\Users\\loris\\AppData\\Local\\K7_YTB_MP3\\K7-YTB-MP3.exe","type":"stdio","allowed_origins":["chrome-extension://hlheeinjdfhgkpbgiagljoamaagldcjc/"]}

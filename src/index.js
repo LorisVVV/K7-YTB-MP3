@@ -1,9 +1,10 @@
 const { app, BrowserWindow, ipcMain, screen, dialog } = require('electron');
 const path = require('node:path');
 
-const { execFile } = require("child_process");
+const { execFile, execSync } = require("child_process");
 const os = require('os');
 const fs = require('fs');
+const { ChildProcess } = require('node:child_process');
 
 let mainWindow;
 let lastPositionBeforeMinimize = null;
@@ -60,6 +61,7 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  registerHostifNotRegistered();
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
@@ -80,8 +82,7 @@ app.on('window-all-closed', () => {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+
 function animateTo(xTarget, yTarget, win, duration = 300) {
 
   const easeOutCubic = (t) => {
@@ -119,6 +120,60 @@ function animateTo(xTarget, yTarget, win, duration = 300) {
     currentAnimation = { timer: null };
     step();
   });
+}
+
+function registerHostifNotRegistered() {
+
+  // Retrieve path to data
+  const dataPath = path.join(app.getPath('userData'), 'config.json')
+  console.log("datapath : " + dataPath);
+  
+  // Get data from file
+  let data = {} 
+  if (fs.existsSync(dataPath)) {
+    data = JSON.parse(fs.readFileSync(dataPath))
+  }
+
+  console.log("is register is " + data['isRegister']?"true":"false");
+  
+  // If value in register then no need to register
+  if (data['isRegister'] == true) {
+    return false;
+  }
+
+  // Getting the path for the host folder
+  const hostPath = app.isPackaged  
+  ? path.join(process.resourcesPath, 'host')
+  : path.join(__dirname, 'host');
+
+  // Get the path of the app
+  const userHomeDir = os.homedir(); 
+  const appPath = path.join(userHomeDir,"\\AppData\\Local\\K7_YTB_MP3\\K7-YTB-MP3.exe")
+
+  // Generate host manifest
+  const hostManifest = {
+    name: "com.lolorisotto.messagek7",
+    description: "Host for communication between app and the extension k7",
+    path: appPath,
+    type: "stdio",
+    allowed_origins: ["chrome-extension://hlheeinjdfhgkpbgiagljoamaagldcjc/"]
+  }
+
+  const manifestPath = path.join(hostPath, "messagek7-manifest.json")
+
+  fs.writeFileSync(manifestPath, JSON.stringify(hostManifest))
+
+  //TODO Register with command
+  const regCommand = `REG ADD "HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.lolorisotto.messagek7" /ve /t REG_SZ /d "${manifestPath}" /f`
+  console.log(regCommand);
+  
+  execSync(regCommand)
+
+  // Add true to data
+  data['isRegister'] = true;
+  // Rewrite datafile
+  fs.writeFileSync(dataPath, JSON.stringify(data), (err) => console.log(err))
+
 }
 
 ipcMain.handle('downloadAudio', async (event, url) => {
