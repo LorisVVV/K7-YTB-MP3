@@ -4,29 +4,11 @@ const path = require('node:path');
 const { execFile, execSync } = require("child_process");
 const os = require('os');
 const fs = require('fs');
-const { url } = require('node:inspector');
 
 let mainWindow;
 let lastPositionBeforeMinimize = null;
 const width = 450;
 const height = 260;
-let testData = 0;
-
-
-if (process.env.ELECTRON_STDIN === '1') {
-  process.stdin.resume();
-  process.stdin.setEncoding('utf8');
-
-
-  process.stdin.on('data', (data) => {
-    console.log('stdin reçu:', data);
-    // mainWindow?.webContents.send('setUrl', {url:"Yipee"});
-
-    testData +=1
-
-    // mainWindow?.webContents.send('stdin-data', data);
-  });
-}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -76,24 +58,18 @@ const createWindow = () => {
 
 
 app.whenReady().then(() => {
-
-
-
   registerHostifNotRegistered();
   
   mainWindow = createWindow();
   
-  // console.dir(process.stdin)
+  const url = process.argv[1]
 
-  // process.stdin.pipe(process.stdout);
 
-  // setTimeout(() => {
-  //   fs.readFile('C:\\Users\\loris\\Documents\\test.txt', (value) => {
-  //     mainWindow.webContents.send('setUrl', {url:value});
-  //   })
-  // },5000)
+  setTimeout(() => {
+    mainWindow.webContents.send('setUrl', {url:url});
 
-  const path = 'C:\\Users\\loris\\Documents\\test.txt'
+  }, 1000)
+  
 
   fs.watchFile(path, (eventType, filename) => {
     console.log('Changement dans le document');
@@ -102,12 +78,6 @@ app.whenReady().then(() => {
 
     mainWindow.webContents.send('setUrl', {url:value});
   })
-
-  
-
-  // process.stdin.addListener('data', (event, data) => {
-  //   mainWindow.webContents.send('setUrl', {url:"Yipee"});
-  // })
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -192,8 +162,7 @@ function registerHostifNotRegistered() {
   : path.join(__dirname, 'host');
 
   // Get the path of the app
-  const userHomeDir = os.homedir(); 
-  const appPath = path.join(userHomeDir,"\\AppData\\Local\\K7_YTB_MP3\\K7-YTB-MP3.exe")
+  const appPath = path.join(hostPath,"hostk7.exe")
 
   // Generate host manifest
   const hostManifest = {
