@@ -4,12 +4,29 @@ const path = require('node:path');
 const { execFile, execSync } = require("child_process");
 const os = require('os');
 const fs = require('fs');
-const { ChildProcess } = require('node:child_process');
+const { url } = require('node:inspector');
 
 let mainWindow;
 let lastPositionBeforeMinimize = null;
 const width = 450;
 const height = 260;
+let testData = 0;
+
+
+if (process.env.ELECTRON_STDIN === '1') {
+  process.stdin.resume();
+  process.stdin.setEncoding('utf8');
+
+
+  process.stdin.on('data', (data) => {
+    console.log('stdin reçu:', data);
+    // mainWindow?.webContents.send('setUrl', {url:"Yipee"});
+
+    testData +=1
+
+    // mainWindow?.webContents.send('stdin-data', data);
+  });
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -57,12 +74,40 @@ const createWindow = () => {
   return win
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+
 app.whenReady().then(() => {
+
+
+
   registerHostifNotRegistered();
-  createWindow();
+  
+  mainWindow = createWindow();
+  
+  // console.dir(process.stdin)
+
+  // process.stdin.pipe(process.stdout);
+
+  // setTimeout(() => {
+  //   fs.readFile('C:\\Users\\loris\\Documents\\test.txt', (value) => {
+  //     mainWindow.webContents.send('setUrl', {url:value});
+  //   })
+  // },5000)
+
+  const path = 'C:\\Users\\loris\\Documents\\test.txt'
+
+  fs.watchFile(path, (eventType, filename) => {
+    console.log('Changement dans le document');
+    
+    const value = fs.readFileSync('C:\\Users\\loris\\Documents\\test.txt').toString()
+
+    mainWindow.webContents.send('setUrl', {url:value});
+  })
+
+  
+
+  // process.stdin.addListener('data', (event, data) => {
+  //   mainWindow.webContents.send('setUrl', {url:"Yipee"});
+  // })
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -71,7 +116,10 @@ app.whenReady().then(() => {
       mainWindow = createWindow();
     }
   });
+
 });
+
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -126,18 +174,15 @@ function registerHostifNotRegistered() {
 
   // Retrieve path to data
   const dataPath = path.join(app.getPath('userData'), 'config.json')
-  console.log("datapath : " + dataPath);
   
   // Get data from file
   let data = {} 
   if (fs.existsSync(dataPath)) {
     data = JSON.parse(fs.readFileSync(dataPath))
   }
-
-  console.log("is register is " + data['isRegister']?"true":"false");
   
-  // If value in register then no need to register
-  if (data['isRegister'] == true) {
+  // If value in isRegistered then no need to register
+  if (data['isRegistered'] == true) {
     return false;
   }
 
@@ -160,17 +205,14 @@ function registerHostifNotRegistered() {
   }
 
   const manifestPath = path.join(hostPath, "messagek7-manifest.json")
-
   fs.writeFileSync(manifestPath, JSON.stringify(hostManifest))
 
-  //TODO Register with command
-  const regCommand = `REG ADD "HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.lolorisotto.messagek7" /ve /t REG_SZ /d "${manifestPath}" /f`
-  console.log(regCommand);
-  
+  // Register the new manifest to Windows
+  const regCommand = `REG ADD "HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.lolorisotto.messagek7" /ve /t REG_SZ /d "${manifestPath}" /f`  
   execSync(regCommand)
 
-  // Add true to data
-  data['isRegister'] = true;
+  // Put isRegistered at true
+  data['isRegistered'] = true;
   // Rewrite datafile
   fs.writeFileSync(dataPath, JSON.stringify(data), (err) => console.log(err))
 
@@ -233,9 +275,9 @@ ipcMain.handle('minimize', (event) => {
       await animateTo(screenBounds.bounds.width - 450, screenBounds.bounds.height, win, 2000)
       win.minimize();
     })();
-
-
   }
+
+  mainWindow.webContents.send('setUrl', {url:process.stdin.destroyed});
 })
 
 ipcMain.handle('chooseDirectory', async (event) => {
