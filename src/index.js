@@ -61,22 +61,33 @@ app.whenReady().then(() => {
   registerHostifNotRegistered();
   
   mainWindow = createWindow();
+
+  // Check if launch with --data arg
+  if (process.argv[1] == '--data') {
+    const url = process.argv[2]
+
+    setTimeout(() => {
+      mainWindow.webContents.send('setUrl', {url:url});
+    }, 1000)
+  }
   
-  const url = process.argv[1]
-
-
-  setTimeout(() => {
-    mainWindow.webContents.send('setUrl', {url:url});
-
-  }, 1000)
-  
-
-  fs.watchFile(path, (eventType, filename) => {
+  // Adding watcher on config.json
+  const hostPath = path.join(process.resourcesPath, 'host/url.txt') ;
+  fs.watchFile(dataPath, (eventType, filename) => {
     console.log('Changement dans le document');
     
-    const value = fs.readFileSync('C:\\Users\\loris\\Documents\\test.txt').toString()
+    let data = {} 
+    if (fs.existsSync(hostPath)) {
 
-    mainWindow.webContents.send('setUrl', {url:value});
+      data = fs.readFileSync(dataPath)
+    }
+
+    if (data['url']) {
+      mainWindow.webContents.send('setUrl', {url:data['url']});
+      data['url'] = null
+      fs.writeFileSync(dataPath, JSON.stringify(data), (err) => console.log(err))
+    } 
+
   })
 
   // On OS X it's common to re-create a window in the app when the
