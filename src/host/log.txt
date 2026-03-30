@@ -1,3 +1,6 @@
-hostk7.exe executed
-Trying to read stdin (inside try)
-No problem while reading sdtin
+hostk7.exe executed - Mon Mar 30 18:48:43 2026
+
+messageSize: 1953719668
+Trying to read message... Sucess !
+message : 
+End of hostk7.exe

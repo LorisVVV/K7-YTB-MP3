@@ -17,33 +17,38 @@ int main() {
     std::cout.rdbuf(ofs.rdbuf());
     std::cerr.rdbuf(ofs.rdbuf());
 
-    std::cout << "hostk7.exe executed" << std::endl;
+    std::time_t now = std::time(nullptr); 
 
-    // retrieve the url (not working)
+    char* dt = std::ctime(&now);
 
-    //std::getline(std::cin, url);
-
-    // std::cout << stdin << std::endl;
-
+    std::cout << "hostk7.exe executed - " << dt << std::endl;
 
     std::string url;
-    char * messageSize = 0;
+    char message[70];
+    int messageSize = 0;
     std::size_t nCount;
     char * jsonMsg = NULL;
 
 
     try {
-        std::cout << "Trying to read stdin (inside try)" << std::endl;
+        // std::cout << "Trying to read stdin (inside try)" << std::endl;
         nCount = std::fread(&messageSize, 1, 4, stdin);
-        std::cout << "No problem while reading sdtin" << std::endl;
+        std::cout << "messageSize: " + std::to_string(messageSize) << std::endl;
 
     } catch (...) {
-        std::cout << "Error while reading sdtin" << std::endl;
+        std::cout << "Error while reading message size sdtin" << std::endl;
     }
 
-    url = std::to_string(nCount);
+    try {
+        std::cout << "Trying to read message... ";
+        nCount = std::fread(&message, 1, messageSize, stdin);
+        std::cout << "Sucess !" << std::endl;
+        std::cout << "message : " << message << std::endl;
+        
 
-    std::cout << "nCount: " + url << std::endl;
+    } catch (...) {
+        std::cout << "Error while reading message" << std::endl;
+    }
 
     // Devrait fonctionner normalement
 
@@ -52,14 +57,17 @@ int main() {
 
 
     if (result == 0) {
+        // Creating new file
         std::ofstream outfile ("url.txt");
 
-        outfile << url+"test";
+        // Adding the url to the file to trigger the watcher on the app
+        outfile << message;
 
+        // Closing file
         outfile.close();
     } else {
         // Adding the url as arg
-        std::string command ="C:\\Users\\loris\\AppData\\Local\\K7_YTB_MP3\\K7-YTB-MP3.exe --data \"" + url + "test\"";
+        std::string command ="C:\\Users\\loris\\AppData\\Local\\K7_YTB_MP3\\K7-YTB-MP3.exe --data \"" + url + "\"";
         
         // Launching the app with the arg
         system(command.c_str());
