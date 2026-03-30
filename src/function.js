@@ -81,7 +81,7 @@ window.onload = async () => {
     await init()
 
     window.setUrlFct.onSetUrl( (value) => {
-        alert("Message reçu ! " + JSON.stringify(value))
+        // alert("Message reçu ! " + JSON.stringify(value))
         const urlInput = document.getElementById('url')
         if (value.url) {
             urlInput.value = value.url

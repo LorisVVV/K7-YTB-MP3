@@ -1,0 +1,3 @@
+hostk7.exe executed
+Trying to read stdin (inside try)
+No problem while reading sdtin

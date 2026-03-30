@@ -64,28 +64,31 @@ app.whenReady().then(() => {
 
   // Check if launch with --data arg
   if (process.argv[1] == '--data') {
+    
     const url = process.argv[2]
 
-    setTimeout(() => {
-      mainWindow.webContents.send('setUrl', {url:url});
-    }, 1000)
+    mainWindow.webContents.addListener('did-frame-finish-load', () => {
+      console.log('top');
+      
+      setTimeout(() => mainWindow.webContents.send('setUrl', {url:url}), 100)
+    })
   }
   
   // Adding watcher on config.json
-  const hostPath = path.join(process.resourcesPath, 'host/url.txt') ;
-  fs.watchFile(dataPath, (eventType, filename) => {
-    console.log('Changement dans le document');
-    
-    let data = {} 
-    if (fs.existsSync(hostPath)) {
+  const hostUrlPath = app.isPackaged ? path.join(path.join(process.resourcesPath, 'host'), 'url.txt') : path.join(path.join(__dirname, 'host'), 'url.txt');
+  fs.watchFile(hostUrlPath, (eventType, filename) => {    
+    let data = ""
 
-      data = fs.readFileSync(dataPath)
+    // Retrieve data if exist
+    if (fs.existsSync(hostUrlPath)) {
+      data = fs.readFileSync(hostUrlPath).toString()
     }
 
-    if (data['url']) {
-      mainWindow.webContents.send('setUrl', {url:data['url']});
-      data['url'] = null
-      fs.writeFileSync(dataPath, JSON.stringify(data), (err) => console.log(err))
+    // If not null send it to display and delete it from the file
+    if (data != "") {
+      mainWindow.webContents.send('setUrl', {url:data});
+      data = ""
+      fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
     } 
 
   })
@@ -257,7 +260,6 @@ ipcMain.handle('minimize', (event) => {
     })();
   }
 
-  mainWindow.webContents.send('setUrl', {url:process.stdin.destroyed});
 })
 
 ipcMain.handle('chooseDirectory', async (event) => {
