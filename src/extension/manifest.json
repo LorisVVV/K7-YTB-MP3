@@ -1,0 +1,20 @@
+{
+  "name": "K7-extension",
+  "description": "Extension adding a button on every youtube video to send the link to the desktop app K7-YTB-MP3. Download tha app at : https://github.com/LorisVVV/K7-YTB-MP3",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "permissions": [
+    "nativeMessaging",
+    "activeTab"
+  ]
+}

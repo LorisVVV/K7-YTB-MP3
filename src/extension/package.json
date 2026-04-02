@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@types/chrome": "^0.1.38"
+  },
+  "dependencies": {
+    "chrome": "^0.1.0",
+    "path": "^0.12.7"
+  }
+}
