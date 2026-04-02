@@ -3,6 +3,9 @@
 #include <fstream> 
 #include <io.h> 
 #include <fcntl.h>
+#include <vector>
+#include <cstdio>
+
 
 int main() {
     _setmode( _fileno( stdin ), _O_BINARY );
@@ -23,8 +26,6 @@ int main() {
 
     std::cout << "hostk7.exe executed - " << dt << std::endl;
 
-    std::string url;
-    char message[70];
     int messageSize = 0;
     std::size_t nCount;
     char * jsonMsg = NULL;
@@ -39,35 +40,50 @@ int main() {
         std::cout << "Error while reading message size sdtin" << std::endl;
     }
 
+    std::vector<char> message(messageSize);
+    std::string contentMessage = "{\"url\" : \"Error if displayed\"}";
+
     try {
         std::cout << "Trying to read message... ";
-        nCount = std::fread(&message, 1, messageSize, stdin);
-        std::cout << "Sucess !" << std::endl;
-        std::cout << "message : " << message << std::endl;
+        nCount = std::fread(message.data(), 1, messageSize, stdin);
+
+        if (nCount != 0) {
+            std::cout << "Sucess !" << std::endl;
+        }
+        // std::string strTemp(message.begin(), message.end());
+        // std::cout << "message locally : " << strTemp << std::endl;
         
+        // contentMessage = strTemp;
+        // std::cout << "message : " << contentMessage << std::endl;
+
+        contentMessage = "";
+
+        for (int i = 0; i < message.size(); i++) {
+            contentMessage += message.at(i);
+        }
+        std::cout << "Message : "+contentMessage << std::endl;
 
     } catch (...) {
         std::cout << "Error while reading message" << std::endl;
     }
 
-    // Devrait fonctionner normalement
-
+    
+    // Searching of instance of the application
     std::string findProcessCmd = "tasklist | findstr \"K7-YTB-MP3\"";
     int result = system(findProcessCmd.c_str());
 
+    // Creating new file
+    std::ofstream outfile ("url.txt");
 
-    if (result == 0) {
-        // Creating new file
-        std::ofstream outfile ("url.txt");
+    // Adding the url to the file to trigger the watcher on the app
+    outfile << contentMessage;
 
-        // Adding the url to the file to trigger the watcher on the app
-        outfile << message;
+    // Closing file
+    outfile.close();
 
-        // Closing file
-        outfile.close();
-    } else {
+    if (result == 1) {
         // Adding the url as arg
-        std::string command ="C:\\Users\\loris\\AppData\\Local\\K7_YTB_MP3\\K7-YTB-MP3.exe --data \"" + url + "\"";
+        std::string command ="C:\\Users\\loris\\AppData\\Local\\K7_YTB_MP3\\K7-YTB-MP3.exe --data";
         
         // Launching the app with the arg
         system(command.c_str());

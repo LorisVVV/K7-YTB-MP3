@@ -56,42 +56,16 @@ const createWindow = () => {
   return win
 };
 
+// Debug purpose
+// app.commandLine.appendSwitch("data", "");
+
 
 app.whenReady().then(() => {
   registerHostifNotRegistered();
   
   mainWindow = createWindow();
 
-  // Check if launch with --data arg
-  if (process.argv[1] == '--data') {
-    
-    const url = process.argv[2]
-
-    mainWindow.webContents.addListener('did-frame-finish-load', () => {
-      console.log('top');
-      
-      setTimeout(() => mainWindow.webContents.send('setUrl', {url:url}), 100)
-    })
-  }
-  
-  // Adding watcher on config.json
-  const hostUrlPath = app.isPackaged ? path.join(path.join(process.resourcesPath, 'host'), 'url.txt') : path.join(path.join(__dirname, 'host'), 'url.txt');
-  fs.watchFile(hostUrlPath, (eventType, filename) => {    
-    let data = ""
-
-    // Retrieve data if exist
-    if (fs.existsSync(hostUrlPath)) {
-      data = fs.readFileSync(hostUrlPath).toString()
-    }
-
-    // If not null send it to display and delete it from the file
-    if (data != "") {
-      mainWindow.webContents.send('setUrl', {url:data});
-      data = ""
-      fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
-    } 
-
-  })
+  checkArgAndAddWatcher();
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -200,6 +174,59 @@ function registerHostifNotRegistered() {
   fs.writeFileSync(dataPath, JSON.stringify(data), (err) => console.log(err))
 
 }
+
+function checkArgAndAddWatcher() {
+  // Path to find the url.txt file
+  const hostUrlPath = app.isPackaged ? path.join(path.join(process.resourcesPath, 'host'), 'url.txt') : path.join(path.join(__dirname, 'host'), 'url.txt');
+
+  // Check if launch with --data arg
+  if (app.commandLine.hasSwitch("data")) {
+    
+    // If true check the url.txt file immediately, before setting the watcher
+    let data = ""
+
+    // Retrieve data if exist
+    if (fs.existsSync(hostUrlPath)) {
+      data = fs.readFileSync(hostUrlPath).toString()
+    }
+
+    // If not null send it to display and delete it from the file
+    if (data != "") {
+      // Add event listener for when the pages is loaded
+      mainWindow.webContents.addListener('did-frame-finish-load', () => {
+        // Timeout so that it doesn't crash if send to fast
+        setTimeout(() => {
+          // Sending data
+          mainWindow.webContents.send('setUrl', JSON.parse(data))
+          // Clearing the url.txt
+          data = ""
+          fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+        }, 25)
+      })
+    }
+  }
+  
+  // Adding watcher on url.txt
+  fs.watchFile(hostUrlPath, (eventType, filename) => {    
+    let data = ""
+
+    // Retrieve data if exist
+    if (fs.existsSync(hostUrlPath)) {
+      data = fs.readFileSync(hostUrlPath).toString()
+    }
+
+    // If not null send it to display and delete it from the file
+    if (data != "") {
+      mainWindow.webContents.send('setUrl', JSON.parse(data));
+      data = ""
+      fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+    } 
+
+  })
+}
+
+
+// ipcMain handlers
 
 ipcMain.handle('downloadAudio', async (event, url) => {
 
