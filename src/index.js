@@ -196,12 +196,16 @@ function checkArgAndAddWatcher() {
       mainWindow.webContents.addListener('did-frame-finish-load', () => {
         // Timeout so that it doesn't crash if send to fast
         setTimeout(() => {
-          // Sending data
-          mainWindow.webContents.send('setUrl', JSON.parse(data))
-          // Clearing the url.txt
-          data = ""
-          fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
-        }, 25)
+          try {
+            // Sending data
+            mainWindow.webContents.send('setUrl', JSON.parse(data))
+            // Clearing the url.txt
+            data = ""
+            fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+          } catch (e) {
+            console.error(e);
+          }
+        }, 25)   
       })
     }
   }
@@ -217,11 +221,14 @@ function checkArgAndAddWatcher() {
 
     // If not null send it to display and delete it from the file
     if (data != "") {
-      mainWindow.webContents.send('setUrl', JSON.parse(data));
-      data = ""
-      fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+      try {
+        mainWindow.webContents.send('setUrl', JSON.parse(data));
+        data = ""
+        fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+      } catch (e) {
+        console.error(e);
+      }
     } 
-
   })
 }
 
