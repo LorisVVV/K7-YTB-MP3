@@ -43,23 +43,29 @@ shadow.innerHTML = `
 `;
 
 shadow.getElementById('k7-icon').addEventListener('click', () => {
-  chrome.runtime.sendMessage(
-    { head: "sendUrl",
-      url: window.location.href },
-    (response) => {
-      console.log('Réponse du service worker :', response);
-    }
-  );
-});
 
-document.body.addEventListener('click', () => {
-  const anchor = document.querySelector('div#title.style-scope.ytd-watch-metadata')
-  if (anchor && !anchor.children.namedItem('k7-icon')) {
-    anchor.appendChild(host)
+  try {
+    chrome.runtime.sendMessage(
+      { head: "sendUrl",
+        url: window.location.href },
+      (response) => {
+        console.log('Réponse du service worker :', response);
+      }
+    );
+  } catch (e) {
+    chrome.tabs.create()
   }
 
-  console.dir(anchor);
-})
+});
+
+// document.body.addEventListener('click', () => {
+//   const anchor = document.querySelector('div#title.style-scope.ytd-watch-metadata')
+//   if (anchor && !anchor.children.namedItem('k7-icon')) {
+//     anchor.appendChild(host)
+//   }
+
+//   console.dir(anchor);
+// })
 
 function timeout() {
   setTimeout(() => {
@@ -74,4 +80,3 @@ function timeout() {
 }
 
 timeout()
-  

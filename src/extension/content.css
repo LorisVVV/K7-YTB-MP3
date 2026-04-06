@@ -1,9 +1,9 @@
-#host-k7 {
+div#host-k7 {
     cursor: pointer;
     transition: all 0.5s
 }
 
-#host-k7:hover {
+div#host-k7:hover {
     transform: scale(1.2);
 }
 

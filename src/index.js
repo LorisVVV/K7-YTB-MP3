@@ -15,6 +15,10 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+if (app.requestSingleInstanceLock() == false) {
+  app.quit()
+}
+
 const createWindow = () => {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -77,8 +81,6 @@ app.whenReady().then(() => {
 
 });
 
-
-
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
@@ -130,7 +132,7 @@ function animateTo(xTarget, yTarget, win, duration = 300) {
 
 function registerHostifNotRegistered() {
 
-  // Retrieve path to data
+  // Retrieve path to config.json
   const dataPath = path.join(app.getPath('userData'), 'config.json')
   
   // Get data from file
@@ -151,14 +153,14 @@ function registerHostifNotRegistered() {
 
   // Get the path of the app
   const appPath = path.join(hostPath,"hostk7.exe")
-
+  const extensionID = "nlekaafbnfiidbmjbnaehcjlmdflhkda"
   // Generate host manifest
   const hostManifest = {
     name: "com.lolorisotto.messagek7",
     description: "Host for communication between app and the extension k7",
     path: appPath,
     type: "stdio",
-    allowed_origins: ["chrome-extension://hlheeinjdfhgkpbgiagljoamaagldcjc/"]
+    allowed_origins: ["chrome-extension://"+extensionID+"/"]
   }
 
   const manifestPath = path.join(hostPath, "messagek7-manifest.json")
@@ -225,6 +227,8 @@ function checkArgAndAddWatcher() {
         mainWindow.webContents.send('setUrl', JSON.parse(data));
         data = ""
         fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+        mainWindow.show()
+        mainWindow.focus()
       } catch (e) {
         console.error(e);
       }
