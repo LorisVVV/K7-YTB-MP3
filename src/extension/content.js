@@ -53,7 +53,7 @@ shadow.getElementById('k7-icon').addEventListener('click', () => {
       }
     );
   } catch (e) {
-    chrome.tabs.create()
+    console.log(e);
   }
 
 });

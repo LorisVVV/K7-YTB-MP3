@@ -2,6 +2,7 @@ chrome.runtime.onMessage.addListener((message) => {
 
     if (message.head == "sendUrl") {
         chrome.runtime.sendNativeMessage('com.lolorisotto.messagek7', {...message}, (response) => {
+                console.log("Received response:", response);
                 if (chrome.runtime.lastError) {
                     chrome.tabs.create({ url: "https://github.com/LorisVVV/K7-YTB-MP3/releases/" }, (tab) => {
                         // Listen for the specific tab to finish loading
@@ -24,6 +25,9 @@ chrome.runtime.onMessage.addListener((message) => {
                         };
                         chrome.tabs.onUpdated.addListener(listener);
                     });   
+
+                    console.error(chrome.runtime.lastError.message);
+                    
                 }
             })
     }
