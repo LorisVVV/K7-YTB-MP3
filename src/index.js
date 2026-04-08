@@ -60,10 +60,6 @@ const createWindow = () => {
   return win
 };
 
-// Debug purpose
-// app.commandLine.appendSwitch("data", "");
-
-
 app.whenReady().then(() => {
   registerHostifNotRegistered();
   
@@ -81,9 +77,7 @@ app.whenReady().then(() => {
 
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Quit when all windows are closed
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -177,6 +171,7 @@ function registerHostifNotRegistered() {
 
 }
 
+// Function checking arg used when starting the app to see if started from extension + setup watcher on url.txt
 function checkArgAndAddWatcher() {
   // Path to find the url.txt file
   const hostUrlPath = app.isPackaged ? path.join(path.join(process.resourcesPath, 'host'), 'url.txt') : path.join(path.join(__dirname, 'host'), 'url.txt');
@@ -213,7 +208,7 @@ function checkArgAndAddWatcher() {
   }
   
   // Adding watcher on url.txt
-  fs.watchFile(hostUrlPath, (eventType, filename) => {    
+  fs.watchFile(hostUrlPath, (curr, prev) => {    
     let data = ""
 
     // Retrieve data if exist
@@ -227,9 +222,12 @@ function checkArgAndAddWatcher() {
         mainWindow.webContents.send('setUrl', JSON.parse(data));
         data = ""
         fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
-        mainWindow.show()
-        mainWindow.focus()
+        mainWindow.focus();
+        mainWindow.show();
+
       } catch (e) {
+        data = ""
+        fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
         console.error(e);
       }
     } 
