@@ -25,5 +25,11 @@
     "nativeMessaging",
     "activeTab",
     "scripting"
-  ]
+  ],
+  "web_accessible_resources": [
+    {
+        "resources": ["fonts/*"],
+        "matches": ["http://*/*", "https://*/*"]
+    }
+]
 }

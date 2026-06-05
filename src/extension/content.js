@@ -1,7 +1,7 @@
-const host = document.createElement('div');
-host.id = 'host-k7';
+const hostk7 = document.createElement('div');
+hostk7.id = 'host-k7';
 
-const shadow = host.attachShadow({ mode: 'open' });
+const shadow = hostk7.attachShadow({ mode: 'open' });
 
 shadow.innerHTML = `
 <svg id="k7-icon" width="25.6" height="25.6" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,6 +40,43 @@ shadow.innerHTML = `
 <path d="M179.484 108.825L172.932 112.32V119.309L179.484 122.803L186.037 119.309V112.32L179.484 108.825Z" fill="#170101"/>
 </g>
 </svg>
+
+
+<div class="panelSlider">
+
+    <div class="k7ErrorPanel">
+        <div class="mainPanel">
+            <section class="leftPanel">
+
+                <h1>Error:</h1>
+                <p>The <span class="bold">K7-YTB-MP3</span> app is not or wrongly installed. Follow the link aside to install the last release.</p>
+    
+            </section>
+
+
+            <section class="rightPanel">
+                
+                <div class="linkinPart">
+                    <a href="https://github.com/LorisVVV/K7-YTB-MP3/releases" target="_parent">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M36 26V38C36 39.0609 35.5786 40.0783 34.8284 40.8284C34.0783 41.5786 33.0609 42 32 42H10C8.93913 42 7.92172 41.5786 7.17157 40.8284C6.42143 40.0783 6 39.0609 6 38V16C6 14.9391 6.42143 13.9217 7.17157 13.1716C7.92172 12.4214 8.93913 12 10 12H22" stroke="#170101" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M30 6H42V18" stroke="#170101" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20 28L42 6" stroke="#170101" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <p>Github repo</p>
+                </div>
+
+                <p id="verticalTag">K7-YTB-MP3</p>
+            </section>
+        </div>
+    </div>
+
+</div>
+
+
+
+
 `;
 
 shadow.getElementById('k7-icon').addEventListener('click', () => {
@@ -58,21 +95,134 @@ shadow.getElementById('k7-icon').addEventListener('click', () => {
 
 });
 
-// document.body.addEventListener('click', () => {
-//   const anchor = document.querySelector('div#title.style-scope.ytd-watch-metadata')
-//   if (anchor && !anchor.children.namedItem('k7-icon')) {
-//     anchor.appendChild(host)
-//   }
+const style = document.createElement('style');
+style.textContent = `
 
-//   console.dir(anchor);
-// })
+
+.panelSlider {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+#k7-icon {
+    cursor: pointer;
+    transition: all 0.5s
+}
+
+#k7-icon:hover {
+    transform: scale(1.2);
+}
+
+.k7ErrorPanel {
+    display: none;
+    background-color: transparent;
+    position: absolute;
+    width: 404px;
+    height: 149px;
+    margin: 0%;
+    overflow: hidden;
+    z-index: 1000;
+    transform: none;
+}
+
+.k7ErrorPanel * {
+    font-family: Satoshi;
+    box-sizing: border-box;
+}
+
+.k7ErrorPanel p, .k7ErrorPanel h1 {
+    margin: 0;
+}
+
+.k7ErrorPanel .bold {
+    font-weight: bolder;
+    font-style: italic;
+}
+
+.k7ErrorPanel .mainPanel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    background-color: #F7D392;
+    border-radius: 15px;
+}
+
+.k7ErrorPanel .leftPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+
+}
+
+.k7ErrorPanel .leftPanel h1 {
+    color: #2f2f2f;
+    font-weight: bolder;
+    font-style: italic;
+    font-size: 24px;
+}
+
+.k7ErrorPanel .leftPanel p {
+    color: #170101;
+    font-size: 16px;
+}
+
+.k7ErrorPanel .rightPanel .linkinPart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 20px;
+}
+
+.k7ErrorPanel .rightPanel .linkinPart p {
+    color: #170101;
+    font-style: italic;
+    font-size: 16px;
+}
+
+.k7ErrorPanel .rightPanel {
+    background-color: #E03F26;
+    display: flex;
+    border-radius: 15px;
+    height: 100%;
+}
+
+.k7ErrorPanel .tag {
+    width: 27px;
+    position: relative;
+}
+
+.k7ErrorPanel #verticalTag {
+    display: block;
+    height: 100%;
+    font-family: 'Satoshi';
+    font-style: italic;
+    font-weight: 900;
+    font-size: 20px;
+
+    text-align: justify;
+
+    color: #2F2F2F;
+    writing-mode: sideways-lr;
+    text-orientation:sideways;
+    text-align: center;
+}
+
+
+`;
+shadow.appendChild(style);
+
 
 function timeout() {
   setTimeout(() => {
     const anchor = document.querySelector('div#title.style-scope.ytd-watch-metadata')
     if (anchor && !anchor.children.namedItem('k7-icon')) {
-      anchor.appendChild(host)
-      
+      anchor.appendChild(hostk7)
     } else {
       timeout()
     }
