@@ -56,9 +56,9 @@ async function convert() {
         document.getElementsByClassName('bobine')[0].classList.add('success')
     } catch (e) {
         const isErrorShownValue = await isErrorShown();
-        console.log(isErrorShownValue)
+        
         if (isErrorShownValue == true) {
-            alert(e)
+            alert(e.message)
         }
         document.getElementsByClassName('bobine')[0].classList.add('error')
     }
