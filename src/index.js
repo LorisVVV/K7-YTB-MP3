@@ -60,7 +60,7 @@ const createWindow = () => {
   });
 
   // Opening devtools for debug
-  win.webContents.openDevTools()
+  // win.webContents.openDevTools()
   return win
 };
 

@@ -15,6 +15,12 @@ function resetIcon() {
     document.getElementsByClassName('bobine')[0].classList.remove('error')
 }
 
+function onKeyPressListener(event) {
+    if (event.key == "Enter") {
+        convert()
+    }    
+}
+
 // Ask the user to choose a directory where the file will be download
 async function chooseDirectory() {
     const directory = await window.chooseDirectoryDialog.chooseDirectory()
@@ -56,7 +62,7 @@ async function convert() {
         document.getElementsByClassName('bobine')[0].classList.add('success')
     } catch (e) {
         const isErrorShownValue = await isErrorShown();
-        
+
         if (isErrorShownValue == true) {
             alert(e.message)
         }
