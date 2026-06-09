@@ -44,7 +44,7 @@ shadow.innerHTML = `
 
 <div class="panelSlider">
 
-    <div class="k7ErrorPanel">
+    <div class="k7ErrorPanel" id="k7ErrorPanel">
         <div class="mainPanel">
             <section class="leftPanel">
 
@@ -88,7 +88,7 @@ shadow.getElementById('k7-icon').addEventListener('click', () => {
     function handleResponse(response) {
 
         if (response == "ERROR") {
-
+            shadow.getElementById("k7ErrorPanel").classList.add("open")
         }
 
         console.log("Response in handler : " + response);
@@ -133,6 +133,10 @@ style.textContent = `
     overflow: hidden;
     z-index: 1000;
     transform: none;
+}
+
+.k7ErrorPanel.open {
+    display:block;
 }
 
 .k7ErrorPanel * {
