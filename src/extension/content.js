@@ -79,16 +79,27 @@ shadow.innerHTML = `
 
 `;
 
+// Adding listener on main button
 shadow.getElementById('k7-icon').addEventListener('click', () => {
 
   try {
-    chrome.runtime.sendMessage(
+
+    // Callback for promise send by background after processing the message sent below
+    function handleResponse(response) {
+
+        if (response == "ERROR") {
+
+        }
+
+        console.log("Response in handler : " + response);
+    }
+
+    // Sending message to background
+    const result = chrome.runtime.sendMessage(
       { head: "sendUrl",
-        url: window.location.href },
-      (response) => {
-        console.log('Réponse du service worker :', response);
-      }
-    );
+        url: window.location.href }
+    ).then(handleResponse);    
+
   } catch (e) {
     console.log(e);
   }
@@ -97,8 +108,6 @@ shadow.getElementById('k7-icon').addEventListener('click', () => {
 
 const style = document.createElement('style');
 style.textContent = `
-
-
 .panelSlider {
     width: 100%;
     display: flex;

@@ -151,7 +151,7 @@ function registerHostifNotRegistered() {
 
   // Get the path of the app
   const appPath = path.join(hostPath,"hostk7.exe")
-  const extensionID = "nlekaafbnfiidbmjbnaehcjlmdflhkda"
+  const extensionID = "jllmdoccbnacjencldjfcmknjpmnjeoo"
   // Generate host manifest
   const hostManifest = {
     name: "com.lolorisotto.messagek7",

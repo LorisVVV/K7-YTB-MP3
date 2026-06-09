@@ -1,36 +1,21 @@
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener((message, sender) => {
 
     if (message.head == "sendUrl") {
-        chrome.runtime.sendNativeMessage('com.lolorisotto.messagek7', {...message}, (response) => {
-                console.log("Received response:", response);
-                if (chrome.runtime.lastError) {
 
-                    // const css = `
-                    //     .k7ErrorPanel {
-                    //         display:block;
-                    //     }
-                    // `
+        // onResponse handler
+        function onResponse(response) {
+            console.log("Received response from promise returned by sendNativeMessage:" + response);
+            return "RESPONSE"
+        }
 
-                    // let queryOptions = { active: true, currentWindow: true };
-                    // let tab = chrome.tabs.query(queryOptions);
+        // onError handler
+        function onError(error) {
+            console.log("Error response from promise returned by sendNativeMessage:" + error);
+            return "ERROR"
+        }
 
-                    // tab.then((tab) => {
-                    //     chrome.scripting.insertCSS({
-                    //         target : {tabId : tab[0]?.id},
-                    //         css : css,
-                    //     })
-                    // })
-
-                    
-                    console.error(chrome.runtime.lastError.message);
-
-                }
-            })
-    } else {
-
-
-
-
+        // Sending message with handlers
+        return chrome.runtime.sendNativeMessage('com.lolorisotto.messagek7', {...message}).then(onResponse, onError)
     }
 });
 
