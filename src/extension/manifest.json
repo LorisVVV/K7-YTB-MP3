@@ -23,8 +23,7 @@
   ],
   "permissions": [
     "nativeMessaging",
-    "activeTab",
-    "scripting"
+    "activeTab"
   ],
   "web_accessible_resources": [
     {

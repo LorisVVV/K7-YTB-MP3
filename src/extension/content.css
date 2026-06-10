@@ -26,7 +26,8 @@ div#title.style-scope.ytd-watch-metadata {
 }
 
 .k7ErrorPanel {
-    background-color: transparent;
+    display: none;
+    background-color: #170101;
     position: absolute;
     width: 404px;
     height: 149px;
@@ -34,6 +35,8 @@ div#title.style-scope.ytd-watch-metadata {
     overflow: hidden;
     z-index: 1000;
     transform: none;
+    outline: #170101 6px solid;
+    border-radius: 15px;
 }
 
 .k7ErrorPanel * {
@@ -69,7 +72,7 @@ div#title.style-scope.ytd-watch-metadata {
 }
 
 .k7ErrorPanel .leftPanel h1 {
-    color: #2f2f2f;
+    color: #170101;
     font-weight: bolder;
     font-style: italic;
     font-size: 24px;
@@ -88,12 +91,21 @@ div#title.style-scope.ytd-watch-metadata {
     flex: 1;
     padding: 20px;
 }
+.k7ErrorPanel .rightPanel .linkinPart a {
+    height: 48px;
+    width: 48px;
+}
+
+.k7ErrorPanel .rightPanel .linkinPart:has(a:hover) p {
+    text-decoration: underline;
+}
 
 .k7ErrorPanel .rightPanel .linkinPart p {
     color: #170101;
     font-style: italic;
+    font-weight: bolder;
     font-size: 16px;
-}
+} 
 
 .k7ErrorPanel .rightPanel {
     background-color: #E03F26;
@@ -102,14 +114,30 @@ div#title.style-scope.ytd-watch-metadata {
     height: 100%;
 }
 
-.k7ErrorPanel .tag {
-    width: 27px;
-    position: relative;
+.k7ErrorPanel .endOfPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+    padding-left: 6px;
+    width: fit-content;
+    background-color: #170101;
+}
+
+.k7ErrorPanel .endOfPanel label {
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+    border-radius: 50px;
+}
+
+.k7ErrorPanel .endOfPanel label:hover {
+    outline: #F7D392 solid 1px;
+
 }
 
 .k7ErrorPanel #verticalTag {
     display: block;
-    height: 100%;
     font-family: 'Satoshi';
     font-style: italic;
     font-weight: 900;
@@ -117,8 +145,12 @@ div#title.style-scope.ytd-watch-metadata {
 
     text-align: justify;
 
-    color: #2F2F2F;
+    color: #F7D392;
     writing-mode: sideways-lr;
     text-orientation:sideways;
     text-align: center;
+}
+
+.k7ErrorPanel:has(.endOfPanel #checkboxK7:checked) {
+    display: flex;
 }

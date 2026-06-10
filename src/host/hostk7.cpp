@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdio>
 #include <Windows.h>
+#include <shlobj.h>
 
 int main() {
     // Set binary mode to avoid corrupt message
@@ -75,9 +76,15 @@ int main() {
 
         STARTUPINFOA si = { sizeof(si) };
         PROCESS_INFORMATION pi;
-        
+
+        // Find executable folder by founding the appdata
+
+        std::string appdata = std::getenv("LOCALAPPDATA");
+        std::string exePath = appdata +"\\K7_YTB_MP3\\K7-YTB-MP3.exe";
+
+        ofs << "Localpath found : " + exePath << std::endl;
         // Adding an arg telling the app to check the file where the json msg is
-        std::string command ="C:\\Users\\loris\\AppData\\Local\\K7_YTB_MP3\\K7-YTB-MP3.exe --data";
+        std::string command = exePath + " --data";
 
         // Launching the app as an detached process
         CreateProcessA(

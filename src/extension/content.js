@@ -66,13 +66,26 @@ shadow.innerHTML = `
                     </a>
                     <p>Github repo</p>
                 </div>
-
-                <p id="verticalTag">K7-YTB-MP3</p>
             </section>
+        </div>
+        <div class="endOfPanel">
+            <label>
+                <input type="checkbox" id="checkboxK7" hidden />
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E9C69B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
+                    <line x1="18" y1="6" x2="6" y2="18">
+                    </line>
+                    <line x1="6" y1="6" x2="18" y2="18">
+                    </line>
+                </svg>
+            </label>
+            <p id="verticalTag">K7-YTB-MP3</p>
         </div>
     </div>
 
 </div>
+
+
+
 
 
 
@@ -88,7 +101,7 @@ shadow.getElementById('k7-icon').addEventListener('click', () => {
     function handleResponse(response) {
 
         if (response == "ERROR") {
-            shadow.getElementById("k7ErrorPanel").classList.add("open")
+            shadow.getElementById("checkboxK7").checked = true
         }
 
         console.log("Response in handler : " + response);
@@ -125,7 +138,7 @@ style.textContent = `
 
 .k7ErrorPanel {
     display: none;
-    background-color: transparent;
+    background-color: #170101;
     position: absolute;
     width: 404px;
     height: 149px;
@@ -133,10 +146,8 @@ style.textContent = `
     overflow: hidden;
     z-index: 1000;
     transform: none;
-}
-
-.k7ErrorPanel.open {
-    display:block;
+    outline: #170101 6px solid;
+    border-radius: 15px;
 }
 
 .k7ErrorPanel * {
@@ -172,7 +183,7 @@ style.textContent = `
 }
 
 .k7ErrorPanel .leftPanel h1 {
-    color: #2f2f2f;
+    color: #170101;
     font-weight: bolder;
     font-style: italic;
     font-size: 24px;
@@ -191,12 +202,21 @@ style.textContent = `
     flex: 1;
     padding: 20px;
 }
+.k7ErrorPanel .rightPanel .linkinPart a {
+    height: 48px;
+    width: 48px;
+}
+
+.k7ErrorPanel .rightPanel .linkinPart:has(a:hover) p {
+    text-decoration: underline;
+}
 
 .k7ErrorPanel .rightPanel .linkinPart p {
     color: #170101;
     font-style: italic;
+    font-weight: bolder;
     font-size: 16px;
-}
+} 
 
 .k7ErrorPanel .rightPanel {
     background-color: #E03F26;
@@ -205,14 +225,30 @@ style.textContent = `
     height: 100%;
 }
 
-.k7ErrorPanel .tag {
-    width: 27px;
-    position: relative;
+.k7ErrorPanel .endOfPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+    padding-left: 6px;
+    width: fit-content;
+    background-color: #170101;
+}
+
+.k7ErrorPanel .endOfPanel label {
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+    border-radius: 50px;
+}
+
+.k7ErrorPanel .endOfPanel label:hover {
+    outline: #F7D392 solid 1px;
+
 }
 
 .k7ErrorPanel #verticalTag {
     display: block;
-    height: 100%;
     font-family: 'Satoshi';
     font-style: italic;
     font-weight: 900;
@@ -220,14 +256,17 @@ style.textContent = `
 
     text-align: justify;
 
-    color: #2F2F2F;
+    color: #F7D392;
     writing-mode: sideways-lr;
     text-orientation:sideways;
     text-align: center;
 }
 
-
+.k7ErrorPanel:has(.endOfPanel #checkboxK7:checked) {
+    display: flex;
+}
 `;
+
 shadow.appendChild(style);
 
 
