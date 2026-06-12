@@ -151,14 +151,15 @@ function registerHostifNotRegistered() {
 
   // Get the path of the app
   const appPath = path.join(hostPath,"hostk7.exe")
-  const extensionID = "jllmdoccbnacjencldjfcmknjpmnjeoo"
+  const defaultExtensionID = "kkldfmmhlpiehilpifpgjfemlhdheglc"
+
   // Generate host manifest
   const hostManifest = {
     name: "com.lolorisotto.messagek7",
     description: "Host for communication between app and the extension k7",
     path: appPath,
     type: "stdio",
-    allowed_origins: ["chrome-extension://"+extensionID+"/"]
+    allowed_origins: ["chrome-extension://"+(data['extensionID'] ? data['extensionID'] : defaultExtensionID) +"/"]
   }
 
   const manifestPath = path.join(hostPath, "messagek7-manifest.json")
