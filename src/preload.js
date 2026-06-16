@@ -1,7 +1,7 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, ipcMain } = require('electron');
 
 contextBridge.exposeInMainWorld('ytDownloader', {
   downloadAudio: (url) => ipcRenderer.invoke('downloadAudio', url)
@@ -29,4 +29,9 @@ contextBridge.exposeInMainWorld('isErrorShownFct', {
 
 contextBridge.exposeInMainWorld('setIsErrorShownFct', {
   setIsErrorShown : (value) => ipcRenderer.invoke('setIsErrorShown', value)
+})
+
+
+contextBridge.exposeInMainWorld('setUrlFct', {
+  onSetUrl: (callback) => ipcRenderer.on('setUrl', (_event, value) => callback(value))
 })

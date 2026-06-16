@@ -1,4 +1,3 @@
-
 // Stop the app
 function quit() {
     window.quitApp.quit()
@@ -14,6 +13,12 @@ function minimize() {
 function resetIcon() {
     document.getElementsByClassName('bobine')[0].classList.remove('success')
     document.getElementsByClassName('bobine')[0].classList.remove('error')
+}
+
+function onKeyPressListener(event) {
+    if (event.key == "Enter") {
+        convert()
+    }    
 }
 
 // Ask the user to choose a directory where the file will be download
@@ -57,9 +62,9 @@ async function convert() {
         document.getElementsByClassName('bobine')[0].classList.add('success')
     } catch (e) {
         const isErrorShownValue = await isErrorShown();
-        console.log(isErrorShownValue)
+
         if (isErrorShownValue == true) {
-            alert(e)
+            alert(e.message)
         }
         document.getElementsByClassName('bobine')[0].classList.add('error')
     }
@@ -80,4 +85,12 @@ async function init() {
 
 window.onload = async () => {
     await init()
+
+    window.setUrlFct.onSetUrl( (value) => {
+        // alert("Message reçu ! " + JSON.stringify(value))
+        const urlInput = document.getElementById('url')
+        if (value.url) {
+            urlInput.value = value.url
+        }
+    })
 }

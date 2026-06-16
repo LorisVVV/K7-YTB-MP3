@@ -1,0 +1,156 @@
+div#host-k7 {
+    position: relative;
+    flex: 1;
+}
+
+div#title.style-scope.ytd-watch-metadata {
+    display: flex;
+    gap: 10px;
+}
+
+/* === Popup === */
+
+.panelSlider {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+#k7-icon {
+    cursor: pointer;
+    transition: all 0.5s
+}
+
+#k7-icon:hover {
+    transform: scale(1.2);
+}
+
+.k7ErrorPanel {
+    display: none;
+    background-color: #170101;
+    position: absolute;
+    width: 404px;
+    height: 149px;
+    margin: 0%;
+    overflow: hidden;
+    z-index: 1000;
+    transform: none;
+    outline: #170101 6px solid;
+    border-radius: 15px;
+}
+
+.k7ErrorPanel * {
+    font-family: Satoshi;
+    box-sizing: border-box;
+}
+
+.k7ErrorPanel p, .k7ErrorPanel h1 {
+    margin: 0;
+}
+
+.k7ErrorPanel .bold {
+    font-weight: bolder;
+    font-style: italic;
+}
+
+.k7ErrorPanel .mainPanel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    background-color: #F7D392;
+    border-radius: 15px;
+}
+
+.k7ErrorPanel .leftPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+
+}
+
+.k7ErrorPanel .leftPanel h1 {
+    color: #170101;
+    font-weight: bolder;
+    font-style: italic;
+    font-size: 24px;
+}
+
+.k7ErrorPanel .leftPanel p {
+    color: #170101;
+    font-size: 16px;
+}
+
+.k7ErrorPanel .rightPanel .linkinPart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 20px;
+}
+.k7ErrorPanel .rightPanel .linkinPart a {
+    height: 48px;
+    width: 48px;
+}
+
+.k7ErrorPanel .rightPanel .linkinPart:has(a:hover) p {
+    text-decoration: underline;
+}
+
+.k7ErrorPanel .rightPanel .linkinPart p {
+    color: #170101;
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 16px;
+} 
+
+.k7ErrorPanel .rightPanel {
+    background-color: #E03F26;
+    display: flex;
+    border-radius: 15px;
+    height: 100%;
+}
+
+.k7ErrorPanel .endOfPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+    padding-left: 6px;
+    width: fit-content;
+    background-color: #170101;
+}
+
+.k7ErrorPanel .endOfPanel label {
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+    border-radius: 50px;
+}
+
+.k7ErrorPanel .endOfPanel label:hover {
+    outline: #F7D392 solid 1px;
+
+}
+
+.k7ErrorPanel #verticalTag {
+    display: block;
+    font-family: 'Satoshi';
+    font-style: italic;
+    font-weight: 900;
+    font-size: 20px;
+
+    text-align: justify;
+
+    color: #F7D392;
+    writing-mode: sideways-lr;
+    text-orientation:sideways;
+    text-align: center;
+}
+
+.k7ErrorPanel:has(.endOfPanel #checkboxK7:checked) {
+    display: flex;
+}

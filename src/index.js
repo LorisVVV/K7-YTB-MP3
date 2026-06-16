@@ -1,9 +1,11 @@
 const { app, BrowserWindow, ipcMain, screen, dialog } = require('electron');
 const path = require('node:path');
 
-const { execFile } = require("child_process");
+const { execFile, execSync } = require("child_process");
 const os = require('os');
 const fs = require('fs');
+const { stdout } = require('node:process');
+const { execFileSync } = require('node:child_process');
 
 let mainWindow;
 let lastPositionBeforeMinimize = null;
@@ -13,6 +15,10 @@ const height = 260;
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
+}
+
+if (app.requestSingleInstanceLock() == false) {
+  app.quit()
 }
 
 const createWindow = () => {
@@ -53,14 +59,17 @@ const createWindow = () => {
     }
   });
 
+  // Opening devtools for debug
+  // win.webContents.openDevTools()
   return win
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow();
+  registerHostifNotRegistered();
+  
+  mainWindow = createWindow();
+
+  checkArgAndAddWatcher();
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -69,19 +78,17 @@ app.whenReady().then(() => {
       mainWindow = createWindow();
     }
   });
+
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Quit when all windows are closed
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+
 function animateTo(xTarget, yTarget, win, duration = 300) {
 
   const easeOutCubic = (t) => {
@@ -121,6 +128,120 @@ function animateTo(xTarget, yTarget, win, duration = 300) {
   });
 }
 
+function registerHostifNotRegistered() {
+
+  // Retrieve path to config.json
+  const dataPath = path.join(app.getPath('userData'), 'config.json')
+  
+  // Get data from file
+  let data = {} 
+  if (fs.existsSync(dataPath)) {
+    data = JSON.parse(fs.readFileSync(dataPath))
+  }
+  
+  // If value in isRegistered then no need to register
+  if (data['isRegistered'] == true) {
+    return false;
+  }
+
+  // Getting the path for the host folder
+  const hostPath = app.isPackaged  
+  ? path.join(process.resourcesPath, 'host')
+  : path.join(__dirname, 'host');
+
+  // Get the path of the app
+  const appPath = path.join(hostPath,"hostk7.exe")
+  const defaultExtensionID = "kkldfmmhlpiehilpifpgjfemlhdheglc"
+
+  // Generate host manifest
+  const hostManifest = {
+    name: "com.lolorisotto.messagek7",
+    description: "Host for communication between app and the extension k7",
+    path: appPath,
+    type: "stdio",
+    allowed_origins: ["chrome-extension://"+(data['extensionID'] ? data['extensionID'] : defaultExtensionID) +"/"]
+  }
+
+  const manifestPath = path.join(hostPath, "messagek7-manifest.json")
+  fs.writeFileSync(manifestPath, JSON.stringify(hostManifest))
+
+  // Register the new manifest to Windows
+  const regCommand = `REG ADD "HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.lolorisotto.messagek7" /ve /t REG_SZ /d "${manifestPath}" /f`  
+  execSync(regCommand)
+
+  // Put isRegistered at true
+  data['isRegistered'] = true;
+  // Rewrite datafile
+  fs.writeFileSync(dataPath, JSON.stringify(data), (err) => console.log(err))
+
+}
+
+// Function checking arg used when starting the app to see if started from extension + setup watcher on url.txt
+function checkArgAndAddWatcher() {
+  // Path to find the url.txt file
+  const hostUrlPath = app.isPackaged ? path.join(path.join(process.resourcesPath, 'host'), 'url.txt') : path.join(path.join(__dirname, 'host'), 'url.txt');
+
+  // Check if launch with --data arg
+  if (app.commandLine.hasSwitch("data")) {
+    
+    // If true check the url.txt file immediately, before setting the watcher
+    let data = ""
+
+    // Retrieve data if exist
+    if (fs.existsSync(hostUrlPath)) {
+      data = fs.readFileSync(hostUrlPath).toString()
+    }
+
+    // If not null send it to display and delete it from the file
+    if (data != "") {
+      // Add event listener for when the pages is loaded
+      mainWindow.webContents.addListener('did-frame-finish-load', () => {
+        // Timeout so that it doesn't crash if send to fast
+        setTimeout(() => {
+          try {
+            // Sending data
+            mainWindow.webContents.send('setUrl', JSON.parse(data))
+            // Clearing the url.txt
+            data = ""
+            fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+          } catch (e) {
+            console.error(e);
+          }
+        }, 25)   
+      })
+    }
+  }
+  
+  // Adding watcher on url.txt
+  fs.watchFile(hostUrlPath, (curr, prev) => {    
+    let data = ""
+
+    // Retrieve data if exist
+    if (fs.existsSync(hostUrlPath)) {
+      data = fs.readFileSync(hostUrlPath).toString()
+    }
+
+    // If not null send it to display and delete it from the file
+    if (data != "") {
+      try {
+        mainWindow.webContents.send('setUrl', JSON.parse(data));
+        data = ""
+        fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+        mainWindow.focus();
+        mainWindow.show();
+
+      } catch (e) {
+        data = ""
+        fs.writeFileSync(hostUrlPath, data, (err) => console.log(err))
+        console.error(e);
+      }
+    } 
+  })
+}
+
+
+// ipcMain handlers
+
 ipcMain.handle('downloadAudio', async (event, url) => {
 
   const binPath = app.isPackaged
@@ -155,7 +276,23 @@ ipcMain.handle('downloadAudio', async (event, url) => {
 
   return new Promise((res, rej) => {
     execFile(ytDlpPath, args,  (err) => {
-      if (err) return rej(err);
+      console.log("Test : " + err);
+      
+      if (err) {
+
+        // If error in the loading we can try to update yt-dlp if the error message incite us to do it
+        const regIsUpdateRelated = /yt-dlp -U/
+        const isUpdateRelated = regIsUpdateRelated.test(err)
+
+        if (isUpdateRelated) {
+          // Exec the update command and printing the stdout
+          const stdoutSync = execFileSync(ytDlpPath, ["-U"]) ?? "stdout not working"
+          return rej(stdoutSync);
+        } else {
+          return rej(err);
+        }
+
+      }
       res("Terminé !");
     });
   })
@@ -178,9 +315,8 @@ ipcMain.handle('minimize', (event) => {
       await animateTo(screenBounds.bounds.width - 450, screenBounds.bounds.height, win, 2000)
       win.minimize();
     })();
-
-
   }
+
 })
 
 ipcMain.handle('chooseDirectory', async (event) => {
