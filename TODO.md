@@ -10,4 +10,5 @@
 - Change look
 - ~~Complete form for google~~
 - Add changing format
-- Auto update try
+- ~~Auto update try~~
+- Test auto update

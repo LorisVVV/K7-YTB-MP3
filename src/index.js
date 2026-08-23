@@ -276,22 +276,11 @@ ipcMain.handle('downloadAudio', async (event, url) => {
 
   return new Promise((res, rej) => {
     execFile(ytDlpPath, args,  (err) => {
-      console.log("Test : " + err);
-      
+      // Auto-update on error
       if (err) {
-
-        // If error in the loading we can try to update yt-dlp if the error message incite us to do it
-        const regIsUpdateRelated = /yt-dlp -U/
-        const isUpdateRelated = regIsUpdateRelated.test(err)
-
-        if (isUpdateRelated) {
-          // Exec the update command and printing the stdout
-          const stdoutSync = execFileSync(ytDlpPath, ["-U"]) ?? "stdout not working"
-          return rej(stdoutSync);
-        } else {
-          return rej(err);
-        }
-
+        // Execute yt-dlp with the update arg and return the sout of it
+        const stdoutSync = execFileSync(ytDlpPath, ["-U"]) ?? "stdout not working"
+        return rej(stdoutSync);
       }
       res("Terminé !");
     });
