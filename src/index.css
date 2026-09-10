@@ -327,3 +327,18 @@ html, body {
   outline: 2px solid var(--accent-color);
 }
 
+.circle {
+  z-index: 1;
+  --transition-duration: 1s;
+
+  transition: r ease var(--transition-duration);
+}
+
+.circle:not(.show) {
+  transition-delay: var(--transition-duration);
+}
+
+.circle.show {
+  z-index: 2;
+  r: 450;
+}

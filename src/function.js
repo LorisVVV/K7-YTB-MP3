@@ -15,11 +15,39 @@ function resetIcon() {
     document.getElementsByClassName('bobine')[0].classList.remove('error')
 }
 
+// Listerner of keyboard input to launch the convert function on enter key pressed
 function onKeyPressListener(event) {
-    if (event.key == "Enter") {
+
+    console.dir(event)
+
+    if (event.code == "Enter") {
         convert()
     }    
+
+    // Debug cool effect
+    if (event.code == "Space") {
+        console.log("space clicked");
+        
+        changeBackgroundColors("mp3")
+    }    
+
 }
+
+// Change backgrounds format with colors
+function changeBackgroundColors(format) {
+    
+    const currentCircle = document.getElementsByClassName('circle show')[0]
+
+    if (format != currentCircle.id) {
+        currentCircle.classList.remove('show')
+
+        const newCurrentCircle = document.getElementById(format)
+        
+        newCurrentCircle.classList.add('show')
+    }
+}
+
+
 
 // Ask the user to choose a directory where the file will be download
 async function chooseDirectory() {
