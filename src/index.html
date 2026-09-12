@@ -87,8 +87,10 @@
           <path d="M0 75.6992H430V77.2071H0V75.6992Z" fill="#E03F26"/>
           </mask>
           <g mask="url(#mask0_30_2)">
-          <circle id="mp3" class="circle" cx="430" cy="175" r="0" fill="#E03F26"/>
-          <circle id="mp4" class="circle show" cx="403" cy="162" r="0" fill="#2832EE"/>
+
+          <circle id="mp3" class="circle show" cx="430" cy="175" fill="#E03F26"/>
+          <circle id="mp4" class="circle " cx="430" cy="175" fill="#2E27E9"/>
+          
           </g>
           </g>
           <defs>
@@ -101,7 +103,14 @@
 
 
 
-          <h3 class="watermark">K7-YTB-MP3</h3>
+          <div class="watermark">
+            <h3 class="watermark-tag">K7-YTB-</h3>
+            <select name="format-selector" id="format-selector" onchange="selectFormatOnChangeHandler()">
+              <option value="mp3">MP3</option>
+              <option value="mp4">MP4</option>
+
+            </select>
+          </div>
 
         </div>
       </div>

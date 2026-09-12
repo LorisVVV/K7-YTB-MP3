@@ -31,7 +31,14 @@ contextBridge.exposeInMainWorld('setIsErrorShownFct', {
   setIsErrorShown : (value) => ipcRenderer.invoke('setIsErrorShown', value)
 })
 
-
 contextBridge.exposeInMainWorld('setUrlFct', {
   onSetUrl: (callback) => ipcRenderer.on('setUrl', (_event, value) => callback(value))
+})
+
+contextBridge.exposeInMainWorld('setFormatFct', {
+  setFormat : (value) => ipcRenderer.invoke('setFormat', value)
+})
+
+contextBridge.exposeInMainWorld('getFormatFct', {
+  getFormat : () => ipcRenderer.invoke('getFormat')
 })

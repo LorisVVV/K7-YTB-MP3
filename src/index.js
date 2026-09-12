@@ -88,7 +88,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-
 function animateTo(xTarget, yTarget, win, duration = 300) {
 
   const easeOutCubic = (t) => {
@@ -239,7 +238,6 @@ function checkArgAndAddWatcher() {
   })
 }
 
-
 // ipcMain handlers
 
 ipcMain.handle('downloadAudio', async (event, url) => {
@@ -387,7 +385,28 @@ ipcMain.handle('setIsErrorShown', (event, value) => {
 
 })
 
+ipcMain.handle('getFormat', (event) => {
+  const userDataPath = app.getPath('userData')
+  const dataPath = path.join(userDataPath, 'config.json')
 
+  let data = {} 
+  if (fs.existsSync(dataPath)) {
+    data = JSON.parse(fs.readFileSync(dataPath))
+  }
 
+  return data['format'] ? data['format'] : 'mp3'
+})
 
+ipcMain.handle('setFormat', (event, value) => {
+  const userDataPath = app.getPath('userData')
+  const dataPath = path.join(userDataPath, 'config.json')
 
+  let data = {} 
+  if (fs.existsSync(dataPath)) {
+    data = JSON.parse(fs.readFileSync(dataPath))
+  }
+
+  data['format'] = value
+  fs.writeFileSync(dataPath, JSON.stringify(data), (err) => console.log(err))
+
+})

@@ -25,29 +25,55 @@ function onKeyPressListener(event) {
     }    
 
     // Debug cool effect
-    if (event.code == "Space") {
-        console.log("space clicked");
+    // if (event.code == "Space") {
+    //     console.log("space clicked");
         
-        changeBackgroundColors("mp3")
-    }    
+    //     const currentCircle = document.getElementsByClassName('circle show')[0]
+
+    //     if (currentCircle.id == "mp3") {
+    //         changeBackgroundColors("mp4")
+    //     } else {
+    //         changeBackgroundColors("mp3")
+    //     }
+
+    // }    
 
 }
 
-// Change backgrounds format with colors
-function changeBackgroundColors(format) {
+// Handler changing the format selected
+async function selectFormatOnChangeHandler() {
     
+    const selectElt = document.getElementById("format-selector")
+    const selectedOpt = selectElt.selectedOptions[0]
+
+    await window.setFormatFct.setFormat(selectedOpt.value)
+    changeBackgroundColors(selectedOpt.value)
+}
+
+// Change backgrounds format with right colors
+function changeBackgroundColors(format, bypass) {
     const currentCircle = document.getElementsByClassName('circle show')[0]
 
     if (format != currentCircle.id) {
-        currentCircle.classList.remove('show')
 
         const newCurrentCircle = document.getElementById(format)
-        
-        newCurrentCircle.classList.add('show')
+        const parent = newCurrentCircle.parentElement
+        const cloneNode = newCurrentCircle.cloneNode()
+        newCurrentCircle.remove()
+
+        parent.appendChild(cloneNode)
+        setTimeout(() => {
+            cloneNode.classList.add('show')
+        }, bypass ? 0 : 10)
+        currentCircle.classList.remove('show')
+
     }
 }
 
-
+// Get the default format in the data
+async function getFormat() {
+    return await window.getFormatFct.getFormat()
+}
 
 // Ask the user to choose a directory where the file will be download
 async function chooseDirectory() {
@@ -109,6 +135,18 @@ async function init() {
     if (title) {
         changeDirectoryTitle(title)
     }
+
+    const format = await window.getFormatFct.getFormat()
+    const formatOptions = document.getElementById("format-selector").options
+    
+    Array.from(formatOptions).forEach(elt => {
+        if (elt.value == format) {
+            elt.selected = true
+        } else {
+            elt.selected = false
+        }
+    });
+    changeBackgroundColors(format, true)
 }
 
 window.onload = async () => {
