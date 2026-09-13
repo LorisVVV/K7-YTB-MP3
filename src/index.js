@@ -244,6 +244,13 @@ function checkArgAndAddWatcher() {
 
 ipcMain.handle('downloadAudio', async (event, url) => {
 
+  // Access to data
+  const dataPath = path.join(app.getPath('userData'), 'config.json')
+  let data = {} 
+  if (fs.existsSync(dataPath)) {
+    data = JSON.parse(fs.readFileSync(dataPath))
+  }
+
   const binPath = app.isPackaged
   ? path.join(process.resourcesPath, 'bin')
   : path.join(__dirname, 'bin');
@@ -251,12 +258,6 @@ ipcMain.handle('downloadAudio', async (event, url) => {
   const ytDlpPath = path.join(binPath, 'yt-dlp.exe');
   const ffmpegPath = path.join(binPath, 'ffmpeg.exe');
 
-  // Choix du dossier ou le fichier va être stocker
-  const dataPath = path.join(app.getPath('userData'), 'config.json')
-  let data = {} 
-  if (fs.existsSync(dataPath)) {
-    data = JSON.parse(fs.readFileSync(dataPath))
-  }
   const outputPath = data['directory'] ? data['directory'] : path.join(os.homedir(), 'Downloads');
 
   const args = [
@@ -274,13 +275,15 @@ ipcMain.handle('downloadAudio', async (event, url) => {
       '--windows-filenames'
   ];
 
+  // Try to update at every conversion
+  if (!data['no-auto-save']) {
+    execFileSync(ytDlpPath, ["-U"])
+  }
+
   return new Promise((res, rej) => {
     execFile(ytDlpPath, args,  (err) => {
-      // Auto-update on error
       if (err) {
-        // Execute yt-dlp with the update arg and return the sout of it
-        const stdoutSync = execFileSync(ytDlpPath, ["-U"]) ?? "stdout not working"
-        return rej(stdoutSync);
+        return rej(err.message);
       }
       res("Terminé !");
     });
