@@ -235,8 +235,12 @@ html, body {
   cursor: pointer;
 }
 
-.watermark select:focus-visible {
+.watermark select.focusable:focus-visible {
   outline: 2px solid var(--accent-color);
+}
+
+.watermark select.non-focusable {
+  outline: none;
 }
 
 .watermark-tag {

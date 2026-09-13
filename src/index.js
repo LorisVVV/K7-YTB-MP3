@@ -256,8 +256,10 @@ ipcMain.handle('downloadAudio', async (event, url) => {
     data = JSON.parse(fs.readFileSync(dataPath))
   }
   const outputPath = data['directory'] ? data['directory'] : path.join(os.homedir(), 'Downloads');
+  const format = data['format'] ? data['format'] : 'mp3'
 
-  const args = [
+  const args = {
+    "mp3" : [
       url,
       '-f', 'bestaudio',
       '-x',
@@ -270,10 +272,21 @@ ipcMain.handle('downloadAudio', async (event, url) => {
       '--no-mtime',
       '--no-playlist',
       '--windows-filenames'
-  ];
+  ],
+    "mp4" : [
+      url,
+      '-f', 'bv+ba/b',
+      '--paths', `temp:${app.isPackaged ? path.join(process.resourcesPath, 'tmp') : path.join(__dirname,'tmp')}`,
+      '--paths', `${outputPath}`,
+      '--output', '%(title)s.%(ext)s',
+      '--no-mtime',
+      '--no-playlist',
+      '--windows-filenames'
+    ]
+  }
 
   return new Promise((res, rej) => {
-    execFile(ytDlpPath, args,  (err) => {
+    execFile(ytDlpPath, args[format],  (err) => {
       console.log("Test : " + err);
       
       if (err) {

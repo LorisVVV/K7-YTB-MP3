@@ -24,20 +24,19 @@ function onKeyPressListener(event) {
         convert()
     }    
 
-    // Debug cool effect
-    // if (event.code == "Space") {
-    //     console.log("space clicked");
-        
-    //     const currentCircle = document.getElementsByClassName('circle show')[0]
+}
 
-    //     if (currentCircle.id == "mp3") {
-    //         changeBackgroundColors("mp4")
-    //     } else {
-    //         changeBackgroundColors("mp3")
-    //     }
+// Called on focus of the combobox shox outline if focus by a keyboard
+function onFocusHandler(event) {
+    const selectElt = document.getElementById('format-selector')
+    console.log("wtf");
+    
+    if (event.relatedTarget != null ) {
+        selectElt.classList.replace('non-focusable', 'focusable')
 
-    // }    
-
+    } else {
+        selectElt.classList.replace('focusable', 'non-focusable')
+    }
 }
 
 // Handler changing the format selected
