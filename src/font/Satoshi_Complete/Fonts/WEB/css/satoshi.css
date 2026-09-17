@@ -39,3 +39,21 @@
   font-display: swap;
   font-style: italic;
 }
+@font-face {
+  font-family: 'Satoshi-BoldItalic';
+  src: url('../fonts/Satoshi-BoldItalic.woff2') format('woff2'),
+       url('../fonts/Satoshi-BoldItalic.woff') format('woff'),
+       url('../fonts/Satoshi-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Satoshi-BlackItalic';
+  src: url('../fonts/Satoshi-BlackItalic.woff2') format('woff2'),
+       url('../fonts/Satoshi-BlackItalic.woff') format('woff'),
+       url('../fonts/Satoshi-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-display: swap;
+  font-style: italic;
+}

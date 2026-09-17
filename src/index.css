@@ -233,6 +233,7 @@ html, body {
   display: flex;
 
   cursor: pointer;
+  font-family: 'Satoshi-Medium';
 }
 
 .watermark select.focusable:focus-visible {
@@ -245,9 +246,12 @@ html, body {
 
 .watermark-tag {
   user-select: none;
-  color: var(--background-color);
-  font-size: smaller;
-  font-family: 'Satoshi-MediumItalic';
+  color: black;
+  /* color: var(--main-color); */
+  /* color: var(--background-color); */
+  font-size: 13px;
+  font-family: 'Satoshi-BlackItalic';
+  -webkit-font-smoothing: antialiased;
 }
 
 .footer {
@@ -304,7 +308,7 @@ html, body {
 
 .param > h3 {
   font-family: 'Satoshi-Medium';
-  font-size: xx-small;
+  font-size: 10px;
   color: var(--second-color);
 }
 
