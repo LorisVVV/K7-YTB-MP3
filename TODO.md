@@ -7,8 +7,10 @@
 - ~~Add cross to close popup (label x hidden checkbox) + change the way we opened it by using the checkbox~~
 - Check complete workflow in production type (write use case)
 - ~~Check every permission for extension~~
-- Change look
+- ~~Change look (red stripes)~~
 - ~~Complete form for google~~
-- Add changing format
+- Rebrand in main
+- Check for deprecated dependencies
+- ~~Complete form for google~~
 - ~~Auto update try~~
 - Test auto update

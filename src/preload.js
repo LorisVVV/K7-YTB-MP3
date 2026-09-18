@@ -1,37 +1,17 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
-const { contextBridge, ipcRenderer, ipcMain } = require('electron');
+const {contextBridge, ipcRenderer} = require('electron');
 
-contextBridge.exposeInMainWorld('ytDownloader', {
-  downloadAudio: (url) => ipcRenderer.invoke('downloadAudio', url)
-});
-
-contextBridge.exposeInMainWorld('quitApp', {
-  quit: () => ipcRenderer.invoke('quit')
-});
-
-contextBridge.exposeInMainWorld('minimizeWindow', {
-    minimize : () => ipcRenderer.invoke('minimize')
-})
-
-contextBridge.exposeInMainWorld('chooseDirectoryDialog', {
-    chooseDirectory : () => ipcRenderer.invoke('chooseDirectory')
-})
-
-contextBridge.exposeInMainWorld('getDirectoryChosen', {
-    getDirectory : () => ipcRenderer.invoke('getDirectory')
-})
-
-contextBridge.exposeInMainWorld('isErrorShownFct', {
-  isErrorShown : () => ipcRenderer.invoke('isErrorShown')
-})
-
-contextBridge.exposeInMainWorld('setIsErrorShownFct', {
-  setIsErrorShown : (value) => ipcRenderer.invoke('setIsErrorShown', value)
-})
-
-
-contextBridge.exposeInMainWorld('setUrlFct', {
-  onSetUrl: (callback) => ipcRenderer.on('setUrl', (_event, value) => callback(value))
+contextBridge.exposeInMainWorld('fcts',{
+  downloadAudio: (url) => ipcRenderer.invoke('downloadAudio', url),
+  quit: () => ipcRenderer.invoke('quit'),
+  minimize : () => ipcRenderer.invoke('minimize'),
+  chooseDirectory : () => ipcRenderer.invoke('chooseDirectory'),
+  getDirectory : () => ipcRenderer.invoke('getDirectory'),
+  isErrorShown : () => ipcRenderer.invoke('isErrorShown'),
+  setIsErrorShown : (value) => ipcRenderer.invoke('setIsErrorShown', value),
+  onSetUrl: (callback) => ipcRenderer.on('setUrl', (_event, value) => callback(value)),
+  setFormat : (value) => ipcRenderer.invoke('setFormat', value),
+  getFormat : () => ipcRenderer.invoke('getFormat')
 })
