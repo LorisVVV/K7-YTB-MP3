@@ -281,7 +281,8 @@ ipcMain.handle('downloadAudio', async (event, url) => {
       '--output', '%(title)s.%(ext)s',
       '--no-mtime',
       '--no-playlist',
-      '--windows-filenames'
+      '--windows-filenames',
+      '--merge-output-format', 'mp4'
     ]
   }
 
