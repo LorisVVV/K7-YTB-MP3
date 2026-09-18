@@ -11,3 +11,6 @@
 - ~~Complete form for google~~
 - Rebrand in main
 - Check for deprecated dependencies
+- ~~Complete form for google~~
+- ~~Auto update try~~
+- Test auto update

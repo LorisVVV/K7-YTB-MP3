@@ -242,6 +242,13 @@ function checkArgAndAddWatcher() {
 
 ipcMain.handle('downloadAudio', async (event, url) => {
 
+  // Access to data
+  const dataPath = path.join(app.getPath('userData'), 'config.json')
+  let data = {} 
+  if (fs.existsSync(dataPath)) {
+    data = JSON.parse(fs.readFileSync(dataPath))
+  }
+
   const binPath = app.isPackaged
   ? path.join(process.resourcesPath, 'bin')
   : path.join(__dirname, 'bin');
@@ -249,12 +256,6 @@ ipcMain.handle('downloadAudio', async (event, url) => {
   const ytDlpPath = path.join(binPath, 'yt-dlp.exe');
   const ffmpegPath = path.join(binPath, 'ffmpeg.exe');
 
-  // Choix du dossier ou le fichier va être stocker
-  const dataPath = path.join(app.getPath('userData'), 'config.json')
-  let data = {} 
-  if (fs.existsSync(dataPath)) {
-    data = JSON.parse(fs.readFileSync(dataPath))
-  }
   const outputPath = data['directory'] ? data['directory'] : path.join(os.homedir(), 'Downloads');
   const format = data['format'] ? data['format'] : 'mp3'
 
@@ -286,24 +287,15 @@ ipcMain.handle('downloadAudio', async (event, url) => {
     ]
   }
 
+  // Try to update at every conversion
+  if (!data['no-auto-save']) {
+    execFileSync(ytDlpPath, ["-U"])
+  }
+
   return new Promise((res, rej) => {
-    execFile(ytDlpPath, args[format],  (err) => {
-      console.log("Test : " + err);
-      
+    execFile(ytDlpPath, args[format],  (err) => {     
       if (err) {
-
-        // If error in the loading we can try to update yt-dlp if the error message incite us to do it
-        const regIsUpdateRelated = /yt-dlp -U/
-        const isUpdateRelated = regIsUpdateRelated.test(err)
-
-        if (isUpdateRelated) {
-          // Exec the update command and printing the stdout
-          const stdoutSync = execFileSync(ytDlpPath, ["-U"]) ?? "stdout not working"
-          return rej(stdoutSync);
-        } else {
-          return rej(err);
-        }
-
+        return rej(err.message);
       }
       res("Terminé !");
     });
