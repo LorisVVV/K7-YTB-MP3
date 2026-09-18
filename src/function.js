@@ -1,12 +1,12 @@
 // Stop the app
 function quit() {
-    window.quitApp.quit()
+    window.fcts.quit()
 }
 
 // Minimize the app with cool effect
 function minimize() {
     resetIcon()
-    window.minimizeWindow.minimize()
+    window.fcts.minimize()
 }
 
 // Reset the icon in the middle to show again the button to download
@@ -45,7 +45,7 @@ async function selectFormatOnChangeHandler() {
     const selectElt = document.getElementById("format-selector")
     const selectedOpt = selectElt.selectedOptions[0]
 
-    await window.setFormatFct.setFormat(selectedOpt.value)
+    await window.fcts.setFormat(selectedOpt.value)
     changeBackgroundColors(selectedOpt.value)
 }
 
@@ -71,12 +71,12 @@ function changeBackgroundColors(format, bypass) {
 
 // Get the default format in the data
 async function getFormat() {
-    return await window.getFormatFct.getFormat()
+    return await window.fcts.getFormat()
 }
 
 // Ask the user to choose a directory where the file will be download
 async function chooseDirectory() {
-    const directory = await window.chooseDirectoryDialog.chooseDirectory()
+    const directory = await window.fcts.chooseDirectory()
     // If the user have chose a directory and didn't cancel
     if (directory != false) {
        changeDirectoryTitle(directory.filePaths[0]) 
@@ -85,7 +85,7 @@ async function chooseDirectory() {
 
 // Return the actual directory where the file are download
 async function getDirectory() {
-    return await window.getDirectoryChosen.getDirectory()
+    return await window.fcts.getDirectory()
 }
 
 // Change the tooltip on the button "change directory"
@@ -96,13 +96,13 @@ function changeDirectoryTitle(newTitle) {
 
 // Return a boolean depending if the params 'showError' in the config is true or false
 async function isErrorShown() {
-    return await window.isErrorShownFct.isErrorShown()
+    return await window.fcts.isErrorShown()
 }
 
 // Change the value of the params 'showError' in the config
 async function setIsErrorShown() {
     const value = document.getElementById('switch-show-error').checked
-    await window.setIsErrorShownFct.setIsErrorShown(value)
+    await window.fcts.setIsErrorShown(value)
 }
 
 // Main function converting the url enter in the input into a high quality mp3 audio
@@ -111,7 +111,7 @@ async function convert() {
 
     document.getElementsByClassName('bobine')[0].classList.add('spin');
     try {
-        await window.ytDownloader.downloadAudio(url);
+        await window.fcts.downloadAudio(url);
         document.getElementsByClassName('bobine')[0].classList.add('success')
     } catch (e) {
         const isErrorShownValue = await isErrorShown();
@@ -135,7 +135,7 @@ async function init() {
         changeDirectoryTitle(title)
     }
 
-    const format = await window.getFormatFct.getFormat()
+    const format = await window.fcts.getFormat()
     const formatOptions = document.getElementById("format-selector").options
     
     Array.from(formatOptions).forEach(elt => {
@@ -151,7 +151,7 @@ async function init() {
 window.onload = async () => {
     await init()
 
-    window.setUrlFct.onSetUrl( (value) => {
+    window.fcts.onSetUrl( (value) => {
         // alert("Message reçu ! " + JSON.stringify(value))
         const urlInput = document.getElementById('url')
         if (value.url) {
