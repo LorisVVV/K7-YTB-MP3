@@ -9,7 +9,7 @@
 - ~~Check every permission for extension~~
 - ~~Change look (red stripes)~~
 - ~~Complete form for google~~
-- Rebrand in main
+- ~~Rebrand in main~~
 - Check for deprecated dependencies
 - ~~Complete form for google~~
 - ~~Auto update try~~
