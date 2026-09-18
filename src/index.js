@@ -88,7 +88,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-
 function animateTo(xTarget, yTarget, win, duration = 300) {
 
   const easeOutCubic = (t) => {
@@ -239,7 +238,6 @@ function checkArgAndAddWatcher() {
   })
 }
 
-
 // ipcMain handlers
 
 ipcMain.handle('downloadAudio', async (event, url) => {
@@ -258,8 +256,10 @@ ipcMain.handle('downloadAudio', async (event, url) => {
     data = JSON.parse(fs.readFileSync(dataPath))
   }
   const outputPath = data['directory'] ? data['directory'] : path.join(os.homedir(), 'Downloads');
+  const format = data['format'] ? data['format'] : 'mp3'
 
-  const args = [
+  const args = {
+    "mp3" : [
       url,
       '-f', 'bestaudio',
       '-x',
@@ -272,10 +272,22 @@ ipcMain.handle('downloadAudio', async (event, url) => {
       '--no-mtime',
       '--no-playlist',
       '--windows-filenames'
-  ];
+  ],
+    "mp4" : [
+      url,
+      '-f', 'bv+ba/b',
+      '--paths', `temp:${app.isPackaged ? path.join(process.resourcesPath, 'tmp') : path.join(__dirname,'tmp')}`,
+      '--paths', `${outputPath}`,
+      '--output', '%(title)s.%(ext)s',
+      '--no-mtime',
+      '--no-playlist',
+      '--windows-filenames',
+      '--merge-output-format', 'mp4'
+    ]
+  }
 
   return new Promise((res, rej) => {
-    execFile(ytDlpPath, args,  (err) => {
+    execFile(ytDlpPath, args[format],  (err) => {
       console.log("Test : " + err);
       
       if (err) {
@@ -387,7 +399,28 @@ ipcMain.handle('setIsErrorShown', (event, value) => {
 
 })
 
+ipcMain.handle('getFormat', (event) => {
+  const userDataPath = app.getPath('userData')
+  const dataPath = path.join(userDataPath, 'config.json')
 
+  let data = {} 
+  if (fs.existsSync(dataPath)) {
+    data = JSON.parse(fs.readFileSync(dataPath))
+  }
 
+  return data['format'] ? data['format'] : 'mp3'
+})
 
+ipcMain.handle('setFormat', (event, value) => {
+  const userDataPath = app.getPath('userData')
+  const dataPath = path.join(userDataPath, 'config.json')
 
+  let data = {} 
+  if (fs.existsSync(dataPath)) {
+    data = JSON.parse(fs.readFileSync(dataPath))
+  }
+
+  data['format'] = value
+  fs.writeFileSync(dataPath, JSON.stringify(data), (err) => console.log(err))
+
+})
